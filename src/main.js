@@ -3,6 +3,8 @@ import { globalGameState } from './core/gameState.js';
 import { globalInputManager } from './core/inputManager.js';
 import { globalGameLoop } from './core/gameLoop.js';
 import { globalViewManager } from './core/viewManager.js';
+import { globalTimeSystem } from './office/timeSystem.js';
+import { globalHUD } from './ui/hud.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing core modules...');
 
@@ -22,9 +24,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // 3. Load saved state or use initial state
   globalGameState.load();
+  globalHUD.updateAll();
 
   // 4. Start Game Loop
   globalGameLoop.start();
 
-  console.log('Core Engine initialized successfully!');
+  console.log('Core Engine + TimeSystem + HUD initialized successfully!');
 });
