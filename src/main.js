@@ -7,6 +7,8 @@ import { globalTimeSystem } from './office/timeSystem.js';
 import { globalHUD } from './ui/hud.js';
 import { Player } from './office/player.js';
 import { globalOfficeRenderer } from './office/officeRenderer.js';
+import { globalNPCManager } from './office/npcManager.js';
+import { globalDialogueSystem } from './office/dialogueSystem.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
@@ -49,14 +51,33 @@ window.addEventListener('DOMContentLoaded', async () => {
   // 5. Game Loop Handlers
   globalEventBus.on('game:update', (deltaTime) => {
     if (globalViewManager.currentView === 'office' && player && mapData) {
-      player.update(deltaTime, mapData.collision);
+      if (!globalDialogueSystem.isActive()) {
+        player.update(deltaTime, mapData.collision);
+        globalNPCManager.checkProximity(player.tileX, player.tileY);
+      }
       globalOfficeRenderer.updateCamera(player.x, player.y);
+    }
+
+    // Handle [E] keypress for interaction
+    if (globalInputManager.isKeyPressed('e')) {
+      if (globalDialogueSystem.isActive()) {
+        globalDialogueSystem.handleKeyPress();
+      } else if (globalViewManager.currentView === 'office') {
+        const nearbyNpc = globalNPCManager.nearbyNpc;
+        if (nearbyNpc) {
+          const chapter = globalGameState.get('chapter') || 1;
+          const dialogue = globalDialogueSystem.getDialogueForNPC(nearbyNpc.id, chapter);
+          if (dialogue) {
+            globalDialogueSystem.start(dialogue);
+          }
+        }
+      }
     }
   });
 
   globalEventBus.on('game:render', () => {
     if (globalViewManager.currentView === 'office' && player && mapData) {
-      globalOfficeRenderer.draw(player);
+      globalOfficeRenderer.draw(player, globalNPCManager.npcs);
     }
   });
 
@@ -67,5 +88,5 @@ window.addEventListener('DOMContentLoaded', async () => {
   // 7. Start Game Loop
   globalGameLoop.start();
 
-  console.log('Office Map & Player initialized successfully!');
+  console.log('Office Map, Player, NPCs & Dialogue System initialized successfully!');
 });
