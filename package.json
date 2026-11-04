@@ -1,0 +1,19 @@
+{
+  "name": "megasoft-probation-rpg",
+  "version": "1.0.0",
+  "description": "Webgame nhập vai thử việc IT tại MegaSoft Corp",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "game",
+    "rpg",
+    "it-simulator",
+    "pixel-art",
+    "canvas2d"
+  ],
+  "author": "Antigravity Pair Programmer",
+  "license": "MIT"
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MegaSoft Corp: 60 Ngày Thử Việc — IT Probation RPG</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden flex flex-col">
+
+  <!-- HUD Header Overlay -->
+  <header id="hud" class="fixed top-0 left-0 right-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-700/60 px-4 py-2 flex items-center justify-between text-xs select-none">
+    <!-- Player Info & Role -->
+    <div class="flex items-center space-x-3">
+      <span class="text-base">🏢</span>
+      <div>
+        <div class="font-bold tracking-wide text-slate-200" id="hud-player-name">Tân Binh IT</div>
+        <div class="text-[10px] text-indigo-400 font-mono uppercase tracking-wider" id="hud-player-role">Frontend Dev</div>
+      </div>
+    </div>
+
+    <!-- Stats Bars: Energy, Stress, KPI, Rep -->
+    <div class="flex items-center space-x-6">
+      <!-- Energy -->
+      <div class="flex items-center space-x-1.5" title="Năng lượng (hồi bằng Cà phê/Nghỉ ngơi)">
+        <span class="text-emerald-400 font-bold">⚡</span>
+        <div class="w-20 bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+          <div id="hud-energy-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 100%"></div>
+        </div>
+        <span id="hud-energy-text" class="font-mono text-[10px] text-slate-300 w-7">100%</span>
+      </div>
+
+      <!-- Stress -->
+      <div class="flex items-center space-x-1.5" title="Mức độ Stress (≥95% sẽ Burnout thất bại)">
+        <span class="text-rose-400 font-bold">🔥</span>
+        <div class="w-20 bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+          <div id="hud-stress-bar" class="bg-rose-500 h-full transition-all duration-300" style="width: 20%"></div>
+        </div>
+        <span id="hud-stress-text" class="font-mono text-[10px] text-slate-300 w-7">20%</span>
+      </div>
+
+      <!-- KPI -->
+      <div class="flex items-center space-x-1.5" title="Điểm KPI Đánh giá Thử việc">
+        <span class="text-amber-400 font-bold">🎯</span>
+        <div class="w-16 bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+          <div id="hud-kpi-bar" class="bg-amber-500 h-full transition-all duration-300" style="width: 50%"></div>
+        </div>
+        <span id="hud-kpi-text" class="font-mono text-[10px] text-slate-300 w-6">50</span>
+      </div>
+
+      <!-- Reputation -->
+      <div class="flex items-center space-x-1.5" title="Quan hệ Đồng nghiệp / Uy tín">
+        <span class="text-sky-400 font-bold">🤝</span>
+        <div class="w-16 bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+          <div id="hud-rep-bar" class="bg-sky-500 h-full transition-all duration-300" style="width: 50%"></div>
+        </div>
+        <span id="hud-rep-text" class="font-mono text-[10px] text-slate-300 w-6">50</span>
+      </div>
+    </div>
+
+    <!-- Time & Chapter & Quick Actions -->
+    <div class="flex items-center space-x-4">
+      <div class="text-right">
+        <div class="text-amber-300 font-mono font-bold text-sm tracking-wider" id="hud-clock">09:00</div>
+        <div class="text-[10px] text-slate-400 font-mono" id="hud-day-chapter">Ngày 1 • Chap 1</div>
+      </div>
+      <button id="btn-open-settings" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Cài đặt">
+        ⚙️
+      </button>
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center space-y-2 pointer-events-none"></div>
+
+  <!-- Main Viewports Container -->
+  <main class="relative flex-1 w-full h-full pt-12 overflow-hidden">
+    <!-- View 1: 2D Canvas Office View -->
+    <div id="office-container" class="w-full h-full relative flex items-center justify-center bg-slate-950">
+      <canvas id="game-canvas" width="800" height="600" class="max-w-full max-h-full rounded-md shadow-2xl border border-slate-800"></canvas>
+      
+      <!-- Interaction Prompt Tooltip -->
+      <div id="interaction-prompt" class="hidden absolute bottom-6 bg-slate-900/90 border border-indigo-500/80 text-indigo-300 px-4 py-2 rounded-full font-mono text-xs shadow-lg backdrop-blur animate-pulse">
+        Nhấn <span class="bg-indigo-600 text-white font-bold px-1.5 py-0.5 rounded shadow">E</span> để tương tác
+      </div>
+    </div>
+
+    <!-- View 2: Workstation OS Simulator View -->
+    <div id="workstation-os" class="hidden w-full h-full relative bg-slate-900 flex flex-col select-none overflow-hidden">
+      <!-- Desktop Area for Draggable Windows -->
+      <div id="os-desktop" class="relative flex-1 w-full h-full overflow-hidden p-4 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900">
+        <!-- Desktop Shortcuts / Icons -->
+        <div class="grid grid-flow-col grid-rows-6 gap-4 w-max p-2">
+          <button data-app="slack" class="desktop-shortcut flex flex-col items-center p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition w-20 text-center">
+            <span class="text-3xl mb-1 drop-shadow">💬</span>
+            <span class="text-[11px] font-medium text-slate-200">SlackChat</span>
+          </button>
+          <button data-app="jira" class="desktop-shortcut flex flex-col items-center p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition w-20 text-center">
+            <span class="text-3xl mb-1 drop-shadow">📋</span>
+            <span class="text-[11px] font-medium text-slate-200">JiraBoard</span>
+          </button>
+          <button data-app="terminal" class="desktop-shortcut flex flex-col items-center p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition w-20 text-center">
+            <span class="text-3xl mb-1 drop-shadow">💻</span>
+            <span class="text-[11px] font-medium text-slate-200">Terminal</span>
+          </button>
+          <button data-app="codeEditor" class="desktop-shortcut flex flex-col items-center p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition w-20 text-center">
+            <span class="text-3xl mb-1 drop-shadow">📝</span>
+            <span class="text-[11px] font-medium text-slate-200">CodeEditor</span>
+          </button>
+          <button data-app="browser" class="desktop-shortcut flex flex-col items-center p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition w-20 text-center">
+            <span class="text-3xl mb-1 drop-shadow">🌐</span>
+            <span class="text-[11px] font-medium text-slate-200">Browser</span>
+          </button>
+          <button data-app="fileManager" class="desktop-shortcut flex flex-col items-center p-2 rounded-lg hover:bg-white/10 active:bg-white/20 transition w-20 text-center">
+            <span class="text-3xl mb-1 drop-shadow">📁</span>
+            <span class="text-[11px] font-medium text-slate-200">Files</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Taskbar -->
+      <div id="os-taskbar" class="h-11 bg-slate-950/95 border-t border-slate-800 flex items-center justify-between px-3 z-30">
+        <div class="flex items-center space-x-2">
+          <button id="btn-leave-workstation" class="flex items-center space-x-1.5 px-3 py-1 bg-rose-600/90 hover:bg-rose-500 text-white rounded text-xs font-semibold shadow transition">
+            <span>🔙</span>
+            <span>Rời Bàn Làm Việc</span>
+          </button>
+          <div class="h-4 w-px bg-slate-700 mx-1"></div>
+          <!-- Open apps tray -->
+          <div id="os-taskbar-apps" class="flex items-center space-x-1"></div>
+        </div>
+
+        <div class="flex items-center space-x-3 text-xs text-slate-400 font-mono">
+          <span>CyberWork OS v2.4</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modals and Overlays Container -->
+  <div id="dialogue-overlay" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end justify-center p-6"></div>
+  <div id="modal-container" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"></div>
+  <div id="menu-screen" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center text-center p-6"></div>
+
+  <!-- Application Bootstrap -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
