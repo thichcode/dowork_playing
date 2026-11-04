@@ -10,6 +10,7 @@ import { globalOfficeRenderer } from './office/officeRenderer.js';
 import { globalNPCManager } from './office/npcManager.js';
 import { globalDialogueSystem } from './office/dialogueSystem.js';
 import { globalInteractionZones } from './office/interactionZones.js';
+import { globalDesktopOS } from './workstation/desktopOS.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
@@ -63,7 +64,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   const workstationEl = document.getElementById('workstation-os');
   globalViewManager.init(officeEl, workstationEl);
 
-  // 2. Wire workstation exit button
+  // 2. Wire workstation exit button & OS init
+  globalDesktopOS.init();
   const btnLeave = document.getElementById('btn-leave-workstation');
   if (btnLeave) {
     btnLeave.addEventListener('click', () => {
