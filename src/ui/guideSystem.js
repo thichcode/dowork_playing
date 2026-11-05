@@ -61,6 +61,7 @@ export const ITEM_TOOLTIPS = {
 
 export const SHORTCUTS_LIST = [
   { key: 'WASD / ↑↓←→', label: 'Khám phá văn phòng' },
+  { key: 'Shift', label: 'Chạy nhanh (Sprint)' },
   { key: 'E', label: 'Tương tác / Ngồi vào bàn' },
   { key: 'Space', label: 'Phóng to CyberWork OS' },
   { key: '1', label: 'Uống Cà phê' },

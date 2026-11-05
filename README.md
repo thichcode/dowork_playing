@@ -16,10 +16,14 @@ Trò chơi kết hợp 2 trải nghiệm độc đáo:
      - 📊 **Phòng Họp Alpha**: Bảng trắng viết bút dạ cỡ lớn dán ngập tràn các tờ giấy ghi chú Post-it đa sắc màu, bàn họp oval kính dài, hàng ghế xoay cùng PM Hùng.
      - 🖥️ **Phòng Server Datacenter**: Hệ thống tủ rack máy chủ với dải đèn LED phát sáng nhấp nháy (Emissive pulse) và DevOps SRE Khoa canh giữ 24/7.
      - 🌿 **Cảnh quan văn phòng xanh & Tranh cổ động**: Các chậu cây nhiệt đới Monstera và Ficus chậu sứ trắng đặt tại các góc hành lang và lối vào phòng; tranh khẩu hiệu công nghệ đóng khung viền kim loại trên tường hành lang (*"Keep Calm & Git Push"*, *"Zero Downtime Rollout"*).
-   - **Avatar & NPC 3D High-Detail Stylized**:
+   - **Avatar & NPC 3D High-Detail Stylized & Game Feel**:
      - Cấu trúc giải phẫu người sống động với cổ, đầu, mắt, lông mày, mũi, tai, bàn tay và giày thể thao 2 tông màu đế trắng.
      - Đa dạng kiểu tóc và phụ kiện cá tính: Tóc mái uốn, tóc Bob, tóc đuôi ngựa cột nơ (QA Trang), tóc Undercut vuốt sáp (Tech Lead), tóc rẽ ngôi lịch thiệp (Dev Minh, PM Hùng).
      - Thẻ nhân viên IT ID Badge đeo dây Lanyard rủ từ cổ áo, kính cận gọng tri thức cho dàn kỹ sư và Tech Lead.
+     - **Bong bóng thoại hoạt hình Comic & Emotes**: Tự động bung nở (*pop-in scale bounce*) trên đầu đồng nghiệp với các câu thoại hài hước đặc trưng khi tiến lại gần.
+     - **Vật lý di chuyển đã tay (Kinetic Feel)**: Hỗ trợ phím `Shift` chạy nước rút (Sprint x1.7), quán tính trượt nhẹ khi thả phím, nghiêng người (*banking lean*) khi rẽ góc.
+     - **Hiệu ứng hạt & Cảnh vật sống**: Vệt bụi chân tung bay khi chạy nước rút; tán lá cây nhiệt đới đung đưa nhẹ khi bạn chạy lướt qua.
+     - **Âm thanh không gian chân thực**: Tiếng bước chân gõ sàn gỗ/thảm đồng bộ nhịp chân, tiếng quạt server rù trầm phòng Datacenter, tiếng gõ phím cơ rải rác phòng IT.
    - **Xoay Camera 360° & Zoom**: Kéo chuột để xoay quanh văn phòng, lăn chuột để phóng to/thu nhỏ.
    - **Chuyển đổi 3D / 2D tức thì**: Nút `[🎮 3D / 2D]` trên thanh HUD cho phép chuyển đổi qua lại giữa đồ họa 3D hiện đại và phong cách Pixel Retro 2D bất kỳ lúc nào.
 2. **Góc nhìn thứ nhất (First-Person Desk Simulator)**: Khi đi tới bàn làm việc và nhấn `[E]`, camera lướt vào bàn làm việc với chiếc máy tính chạy **CyberWork OS** (nhấn `[Space]` để zoom in/out), nhấp cà phê `[1]`, nhấc máy khi điện thoại bàn reo `[2]`, bóp vịt cao su `[3]`, và có thể nhấn "Đứng dậy [Esc]" để lùi về góc nhìn 3D Isometric dạo chơi tiếp.
@@ -73,6 +77,7 @@ Trò chơi kết hợp 2 trải nghiệm độc đáo:
 | Phím / Chuột | Hành Động |
 |---|---|
 | `W A S D` / `↑ ↓ ← →` | Đi bộ di chuyển avatar 3D khám phá văn phòng qua 4 phòng ban |
+| `Shift` (Giữ) | Chạy nước rút (Sprint x1.7 tốc độ, vung chân tay nhanh, bung bụi chân) |
 | `Kéo Chuột` (Mouse Drag) | Xoay góc nhìn 3D Isometric 360° quanh văn phòng |
 | `Lăn Chuột` (Mouse Wheel) | Phóng to / Thu nhỏ góc nhìn camera 3D |
 | `E` | Tương tác ngữ cảnh (Ngồi vào bàn làm việc, nói chuyện NPC, pha cafe, mở tủ lạnh) |
@@ -95,7 +100,7 @@ Trò chơi kết hợp 2 trải nghiệm độc đáo:
 # 1. Di chuyển vào thư mục dự án
 cd game_thuviec
 
-# 2. Chạy bộ kiểm thử tự động (81 unit tests)
+# 2. Chạy bộ kiểm thử tự động (90 unit tests)
 npm test
 
 # 3. Khởi động máy chủ phát triển cục bộ

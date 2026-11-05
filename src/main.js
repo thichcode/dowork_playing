@@ -120,6 +120,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     globalHUD.showNotification('🚶‍♂️ Bạn đã đứng dậy khỏi bàn làm việc để đi dạo văn phòng!', 2500, 'info');
   });
 
+  // Room ambience transition listener
+  globalEventBus.on('room:changed', (room) => {
+    globalSoundEngine.setRoomAmbience(room);
+  });
+
   // Wire hover tooltips on desk items
   const bindTooltip = (elementId, itemId) => {
     const el = document.getElementById(elementId);
@@ -189,6 +194,15 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         globalOfficeRenderer.setInteractionPrompt(promptText);
         globalOfficeRenderer3D.setPrompt(promptText);
+
+        // Dynamic spatial synthesized footsteps
+        if (player.isMoving) {
+          const room = globalRoomTracker.currentRoom || 'hallway';
+          let surface = 'wood';
+          if (room === 'meeting') surface = 'carpet';
+          else if (room === 'server') surface = 'tile';
+          globalSoundEngine.playFootstep(surface, player.isSprinting);
+        }
       }
       globalOfficeRenderer.updateCamera(player.x, player.y);
       globalOfficeRenderer3D.update(deltaTime, player);
