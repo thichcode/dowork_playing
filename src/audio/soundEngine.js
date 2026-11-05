@@ -10,6 +10,9 @@ export class SoundEngine {
     this.sfxVolume = 0.7;
     this.currentBgm = null;
     this.bgmTimer = null;
+    this.lastFootstepTime = 0;
+    this.currentRoom = null;
+    this.ambientTimer = null;
 
     if (typeof window !== 'undefined') {
       // Lazy init AudioContext on first user interaction
@@ -155,6 +158,76 @@ export class SoundEngine {
       this.bgmTimer = null;
     }
     this.currentBgm = null;
+  }
+
+  playFootstep(surfaceType = 'wood', isSprint = false) {
+    const now = Date.now();
+    const interval = isSprint ? 170 : 310;
+    if (this.lastFootstepTime && (now - this.lastFootstepTime < interval)) {
+      return false;
+    }
+    this.lastFootstepTime = now;
+
+    let baseFreq = 180;
+    let wave = 'triangle';
+    let duration = 0.04;
+    let gain = 0.04;
+
+    if (surfaceType === 'carpet') {
+      baseFreq = 95;
+      duration = 0.06;
+      gain = 0.035;
+    } else if (surfaceType === 'tile') {
+      baseFreq = 340;
+      duration = 0.03;
+      gain = 0.045;
+    }
+
+    if (isSprint) {
+      baseFreq *= 1.2;
+      gain *= 1.25;
+    }
+
+    const pitchJitter = (Math.random() - 0.5) * 25;
+    this.playTone(baseFreq + pitchJitter, duration, wave, gain);
+    return true;
+  }
+
+  setRoomAmbience(roomId) {
+    if (this.currentRoom === roomId) return;
+    this.stopRoomAmbience();
+    this.currentRoom = roomId;
+
+    if (roomId === 'server') {
+      // Periodic server fan cooling drone
+      this.ambientTimer = setInterval(() => {
+        if (this.sfxVolume > 0) {
+          this.playTone(60 + Math.random() * 5, 0.4, 'sine', 0.025 * this.sfxVolume);
+        }
+      }, 450);
+    } else if (roomId === 'it_room') {
+      // Occasional mechanical key typing chatter
+      this.ambientTimer = setInterval(() => {
+        if (this.sfxVolume > 0 && Math.random() < 0.6) {
+          this.playTone(1200 + Math.random() * 400, 0.02, 'triangle', 0.02 * this.sfxVolume);
+        }
+      }, 800);
+    } else if (roomId === 'pantry') {
+      // Gentle bubbling hum
+      this.ambientTimer = setInterval(() => {
+        if (this.sfxVolume > 0 && Math.random() < 0.4) {
+          this.playTone(320 + Math.random() * 80, 0.15, 'sine', 0.02 * this.sfxVolume);
+        }
+      }, 1200);
+    }
+  }
+
+  stopRoomAmbience() {
+    if (this.ambientTimer) {
+      clearInterval(this.ambientTimer);
+      this.ambientTimer = null;
+    }
+    this.currentRoom = null;
   }
 }
 
