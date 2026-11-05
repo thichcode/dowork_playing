@@ -10,6 +10,23 @@ export class OfficeRenderer {
     this.viewportWidth = 800;
     this.viewportHeight = 600;
     this.gameState = options.gameState || globalGameState;
+    this.interactionPrompt = '';
+  }
+
+  get cameraX() {
+    return Math.round(this.camera.x);
+  }
+
+  get cameraY() {
+    return Math.round(this.camera.y);
+  }
+
+  setInteractionPrompt(text) {
+    this.interactionPrompt = text || '';
+  }
+
+  clearInteractionPrompt() {
+    this.interactionPrompt = '';
   }
 
   init(canvas, mapData) {
@@ -20,7 +37,7 @@ export class OfficeRenderer {
     this.viewportHeight = this.canvas.height;
   }
 
-  updateCamera(targetX, targetY) {
+  updateCamera(targetX, targetY, instant = false) {
     if (!this.mapData) return;
 
     const mapPixelW = this.mapData.width * this.mapData.tileSize;
@@ -30,9 +47,13 @@ export class OfficeRenderer {
     const desiredX = targetX - this.viewportWidth / 2 + 16;
     const desiredY = targetY - this.viewportHeight / 2 + 16;
 
-    // Lerp smoothing (0.1)
-    this.camera.x += (desiredX - this.camera.x) * 0.1;
-    this.camera.y += (desiredY - this.camera.y) * 0.1;
+    if (instant || !this.ctx) {
+      this.camera.x = desiredX;
+      this.camera.y = desiredY;
+    } else {
+      this.camera.x += (desiredX - this.camera.x) * 0.15;
+      this.camera.y += (desiredY - this.camera.y) * 0.15;
+    }
 
     // Clamp to map boundaries
     this.camera.x = Math.max(0, Math.min(mapPixelW - this.viewportWidth, this.camera.x));
@@ -77,8 +98,44 @@ export class OfficeRenderer {
       player.draw(ctx, this.camera);
     }
 
+    // Draw interaction prompt bubble above player head
+    if (this.interactionPrompt && player) {
+      const px = player.x - this.camera.x + 16;
+      const py = player.y - this.camera.y - 14;
+      this.drawPromptBubble(ctx, px, py, this.interactionPrompt);
+    }
+
     // Apply lighting overlay based on hour
     this.drawLightingOverlay(ctx);
+  }
+
+  drawPromptBubble(ctx, x, y, text) {
+    ctx.save();
+    ctx.font = 'bold 12px "JetBrains Mono", monospace';
+    const textW = ctx.measureText(text).width;
+    const padX = 8;
+    const h = 22;
+    const w = textW + padX * 2;
+    const boxX = x - w / 2;
+    const boxY = y - h;
+
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(boxX, boxY, w, h, 6);
+    } else {
+      ctx.rect(boxX, boxY, w, h);
+    }
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, x, boxY + h / 2);
+    ctx.restore();
   }
 
   drawLightingOverlay(ctx) {

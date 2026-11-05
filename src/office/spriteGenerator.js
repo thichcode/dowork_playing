@@ -79,6 +79,20 @@ export class SpriteGenerator {
         ctx.fillStyle = '#fde047';
         ctx.fillRect(x + 6, y + 7, 5, 5);
         ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(x + 14, y + 7, 5, 5);
+        ctx.fillStyle = '#f43f5e';
+        ctx.fillRect(x + 21, y + 7, 5, 5);
+        break;
+
+      case 8: // Fridge
+        ctx.fillStyle = '#1e293b';
+        ctx.fillRect(x, y, size, size);
+        ctx.fillStyle = '#cbd5e1'; // metallic fridge
+        ctx.fillRect(x + 4, y + 2, size - 8, size - 4);
+        ctx.fillStyle = '#64748b'; // handle
+        ctx.fillRect(x + 22, y + 8, 2, 8);
+        break;
+        ctx.fillStyle = '#38bdf8';
         ctx.fillRect(x + 13, y + 7, 5, 5);
         ctx.fillStyle = '#f43f5e';
         ctx.fillRect(x + 20, y + 7, 5, 5);
