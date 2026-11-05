@@ -93,6 +93,80 @@ export class OfficeBuilder3D {
 
     officeGroup.add(wallGroup);
 
+    // 2.1 Build Modern Transparent Glass Partitions with Aluminum Frames
+    const glassGroup = new THREE.Group();
+    glassGroup.name = 'glass_walls';
+
+    const glassMat = new THREE.MeshLambertMaterial({
+      color: 0xbae6fd,
+      transparent: true,
+      opacity: 0.35,
+      depthWrite: false
+    });
+    const frameMat = new THREE.MeshLambertMaterial({ color: 0x0f172a });
+
+    // Glass walls separating corridor and departments
+    const glassSections = [
+      // Server Room front glass
+      { x: -totalW * 0.25, z: -1.2, w: totalW * 0.38, h: 1.8 },
+      // Pantry front glass
+      { x: totalW * 0.25, z: -1.2, w: totalW * 0.38, h: 1.8 },
+      // Meeting Room front glass
+      { x: -totalW * 0.25, z: 1.2, w: totalW * 0.38, h: 1.8 },
+      // IT Room front glass
+      { x: totalW * 0.25, z: 1.2, w: totalW * 0.38, h: 1.8 }
+    ];
+
+    for (const sec of glassSections) {
+      // Glass pane
+      const paneGeo = new THREE.BoxGeometry(sec.w, sec.h, 0.05);
+      const pane = new THREE.Mesh(paneGeo, glassMat);
+      pane.position.set(sec.x, sec.h / 2, sec.z);
+      glassGroup.add(pane);
+
+      // Top frame
+      const frameGeo = new THREE.BoxGeometry(sec.w, 0.08, 0.08);
+      const topFrame = new THREE.Mesh(frameGeo, frameMat);
+      topFrame.position.set(sec.x, sec.h, sec.z);
+      glassGroup.add(topFrame);
+    }
+    officeGroup.add(glassGroup);
+
+    // 2.2 Indoor Tropical Potted Plants
+    const plantGroup = new THREE.Group();
+    plantGroup.name = 'plants';
+
+    const plantLocations = [
+      tileTo3D(15, 9, tileSize),  // Hallway crossroads
+      tileTo3D(18, 9, tileSize),  // IT Room entrance
+      tileTo3D(1, 10, tileSize),  // Meeting Room corner
+      tileTo3D(30, 9, tileSize),  // Pantry corner
+      tileTo3D(18, 18, tileSize)  // IT Room back corner
+    ];
+
+    for (let i = 0; i < plantLocations.length; i++) {
+      const p = plantLocations[i];
+      const plantType = i % 2 === 0 ? 'monstera' : 'ficus';
+      const plant = this.createPottedPlantMesh(plantType);
+      plant.position.set(p.x, 0, p.z);
+      plantGroup.add(plant);
+    }
+    officeGroup.add(plantGroup);
+
+    // 2.3 Framed Tech Posters on Corridor Walls
+    const posterGroup = new THREE.Group();
+    posterGroup.name = 'posters';
+
+    const poster1 = this.createWallPosterMesh('Keep Calm & Git Push', 0x3b82f6);
+    poster1.position.set(-4, 1.4, -0.15);
+    posterGroup.add(poster1);
+
+    const poster2 = this.createWallPosterMesh('Zero Downtime Rollout', 0x10b981);
+    poster2.position.set(4, 1.4, -0.15);
+    posterGroup.add(poster2);
+
+    officeGroup.add(posterGroup);
+
     // 3. Build Furniture Group based on Map Data & Zones
     const furnitureGroup = new THREE.Group();
     furnitureGroup.name = 'furniture';
@@ -285,6 +359,74 @@ export class OfficeBuilder3D {
     const back = new THREE.Mesh(backGeo, seatMat);
     back.position.set(0, 0.55, -0.325);
     group.add(back);
+
+    return group;
+  }
+
+  createPottedPlantMesh(type = 'monstera') {
+    const THREE = this.THREE;
+    const group = new THREE.Group();
+    group.name = `plant_${type}`;
+
+    // White ceramic pot
+    const potGeo = new THREE.CylinderGeometry(0.35, 0.25, 0.55, 12);
+    const potMat = new THREE.MeshLambertMaterial({ color: 0xf1f5f9 });
+    const pot = new THREE.Mesh(potGeo, potMat);
+    pot.position.y = 0.275;
+    pot.name = 'plant_pot';
+    group.add(pot);
+
+    // Soil
+    const soilGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.05, 12);
+    const soilMat = new THREE.MeshLambertMaterial({ color: 0x3e2723 });
+    const soil = new THREE.Mesh(soilGeo, soilMat);
+    soil.position.y = 0.54;
+    group.add(soil);
+
+    // Stems & Leaves
+    const stemMat = new THREE.MeshLambertMaterial({ color: 0x166534 });
+    const leafMat = new THREE.MeshLambertMaterial({ color: 0x15803d });
+
+    // 4 broad leaves spreading outward
+    const leafAngles = [0, Math.PI / 2, Math.PI, (Math.PI * 3) / 2, Math.PI / 4];
+    for (let i = 0; i < leafAngles.length; i++) {
+      const angle = leafAngles[i];
+      const leafGeo = new THREE.BoxGeometry(0.32, 0.02, 0.45);
+      const leaf = new THREE.Mesh(leafGeo, leafMat);
+      leaf.name = `leaf_${i + 1}`;
+
+      const reach = 0.25;
+      leaf.position.set(
+        Math.cos(angle) * reach,
+        0.75 + (i * 0.08),
+        Math.sin(angle) * reach
+      );
+      leaf.rotation.y = angle;
+      leaf.rotation.x = 0.35;
+      group.add(leaf);
+    }
+
+    return group;
+  }
+
+  createWallPosterMesh(title = 'Code', accentColor = 0x3b82f6) {
+    const THREE = this.THREE;
+    const group = new THREE.Group();
+    group.name = 'wall_poster';
+
+    // Black frame
+    const frameGeo = new THREE.BoxGeometry(1.4, 0.9, 0.04);
+    const frameMat = new THREE.MeshLambertMaterial({ color: 0x0f172a });
+    const frame = new THREE.Mesh(frameGeo, frameMat);
+    frame.name = 'poster_frame';
+    group.add(frame);
+
+    // Poster canvas
+    const canvasGeo = new THREE.BoxGeometry(1.25, 0.75, 0.05);
+    const canvasMat = new THREE.MeshLambertMaterial({ color: accentColor });
+    const canvas = new THREE.Mesh(canvasGeo, canvasMat);
+    canvas.name = 'poster_canvas';
+    group.add(canvas);
 
     return group;
   }
