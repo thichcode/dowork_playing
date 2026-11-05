@@ -5,6 +5,20 @@ import { EventBus } from '../src/core/eventBus.js';
 import { GameState } from '../src/core/gameState.js';
 import { TimeSystem } from '../src/office/timeSystem.js';
 import { TicketSystem } from '../src/workstation/ticketSystem.js';
+import { MVP_TICKETS } from '../src/data/tickets.js';
+
+test('MVP_TICKETS contains at least 16 rich tickets across 4 roles and 4 chapters', () => {
+  assert.ok(MVP_TICKETS.length >= 16, `Expected at least 16 tickets, got ${MVP_TICKETS.length}`);
+
+  const roles = ['frontend', 'backend', 'qa', 'devops'];
+  for (const role of roles) {
+    const roleTickets = MVP_TICKETS.filter(t => t.role === role);
+    assert.ok(roleTickets.length >= 4, `Role ${role} should have at least 4 tickets, got ${roleTickets.length}`);
+    for (let ch = 1; ch <= 4; ch++) {
+      assert.ok(roleTickets.some(t => t.chapter === ch), `Role ${role} should have a ticket for Chapter ${ch}`);
+    }
+  }
+});
 
 test('TicketSystem filters tickets by role and chapter', () => {
   const sampleTickets = [
