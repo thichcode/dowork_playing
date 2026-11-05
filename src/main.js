@@ -25,6 +25,7 @@ import { globalLocationManager } from './office/locationManager.js';
 import { globalNPCDeskManager } from './office/npcDeskManager.js';
 import { globalSoundEngine } from './audio/soundEngine.js';
 import { globalRoomTracker } from './office/roomTracker.js';
+import { globalOfficeRenderer3D } from './office3d/officeRenderer3D.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
@@ -85,13 +86,20 @@ window.addEventListener('DOMContentLoaded', async () => {
     workstationEl.classList.remove('hidden');
   }
 
-  // Initialize ViewManager with office container & desk view
+  // Initialize ViewManager with office container, desk view & 3D container
   const officeEl = document.getElementById('office-container');
   const deskViewEl = document.getElementById('desk-view');
+  const office3dEl = document.getElementById('office3d-container');
   if (officeEl && deskViewEl) {
-    globalViewManager.init(officeEl, deskViewEl);
+    globalViewManager.init(officeEl, deskViewEl, office3dEl);
     globalViewManager.switch('office');
   }
+
+  // Dimension toggle button [3D / 2D]
+  document.getElementById('btn-toggle-dimension')?.addEventListener('click', () => {
+    const mode = globalOfficeRenderer3D.toggleDimension();
+    globalHUD.showNotification(`Đã chuyển sang góc nhìn ${mode.toUpperCase()}!`, 2000, 'info');
+  });
 
   // 2. Wire workstation exit button & OS init
   globalDesktopOS.init();
@@ -140,7 +148,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     console.error('Failed to load map data:', err);
   }
 
-  // 4. Initialize Player & Office Renderer
+  // 4. Initialize Player & Office Renderers (2D + 3D)
   const canvas = document.getElementById('game-canvas');
   if (canvas && mapData) {
     globalOfficeRenderer.init(canvas, mapData);
@@ -148,6 +156,20 @@ window.addEventListener('DOMContentLoaded', async () => {
       startX: 20 * mapData.tileSize,
       startY: 13 * mapData.tileSize,
       tileSize: mapData.tileSize
+    });
+  }
+
+  // Initialize 3D Isometric Renderer
+  const canvas3D = document.getElementById('game-canvas-3d');
+  if (canvas3D && office3dEl && mapData) {
+    const role = globalGameState.get('player.role') || 'frontend';
+    globalOfficeRenderer3D.init({
+      canvas: canvas3D,
+      container3D: office3dEl,
+      container2D: officeEl,
+      mapData,
+      role,
+      npcs: globalNPCManager.npcs
     });
   }
 
@@ -160,18 +182,16 @@ window.addEventListener('DOMContentLoaded', async () => {
         globalInteractionZones.checkZone(player.tileX, player.tileY);
         globalRoomTracker.update(player.tileX, player.tileY);
 
-        // Update floating interaction prompt on OfficeRenderer
+        // Update floating interaction prompt on OfficeRenderer (2D + 3D)
         const nearbyNpc = globalNPCManager.nearbyNpc;
         const nearbyZone = globalInteractionZones.currentZone;
-        if (nearbyNpc) {
-          globalOfficeRenderer.setInteractionPrompt(`[E] Trò chuyện với ${nearbyNpc.name}`);
-        } else if (nearbyZone) {
-          globalOfficeRenderer.setInteractionPrompt(`[E] ${nearbyZone.label}`);
-        } else {
-          globalOfficeRenderer.clearInteractionPrompt();
-        }
+        const promptText = nearbyNpc ? `[E] Trò chuyện với ${nearbyNpc.name}` : (nearbyZone ? `[E] ${nearbyZone.label}` : '');
+
+        globalOfficeRenderer.setInteractionPrompt(promptText);
+        globalOfficeRenderer3D.setPrompt(promptText);
       }
       globalOfficeRenderer.updateCamera(player.x, player.y);
+      globalOfficeRenderer3D.update(deltaTime, player);
     }
 
     // Handle [E] keypress for interaction
@@ -196,7 +216,11 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   globalEventBus.on('game:render', () => {
     if (globalViewManager.currentView === 'office' && player && mapData) {
-      globalOfficeRenderer.draw(player, globalNPCManager.npcs);
+      if (globalOfficeRenderer3D.is3DMode) {
+        globalOfficeRenderer3D.render();
+      } else {
+        globalOfficeRenderer.draw(player, globalNPCManager.npcs);
+      }
     }
   });
 
@@ -301,11 +325,25 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   globalEventBus.on('game:role-selected', () => {
     globalViewManager.switch('office');
+    const role = globalGameState.get('player.role') || 'frontend';
+    const canvas3D = document.getElementById('game-canvas-3d');
+    const container3D = document.getElementById('office3d-container');
+    const officeEl = document.getElementById('office-container');
+    if (canvas3D && container3D && mapData) {
+      globalOfficeRenderer3D.init({
+        canvas: canvas3D,
+        container3D,
+        container2D: officeEl,
+        mapData,
+        role,
+        npcs: globalNPCManager.npcs
+      });
+    }
     setTimeout(() => {
       globalNPCDeskManager.spawnNPC(
         'tuan_anh',
         'happy',
-        '🎉 Chào mừng em gia nhập MegaSoft Corp! Hãy đi dạo khám phá văn phòng hoặc nhấn [E] tại bàn để mở CyberWork OS!'
+        '🎉 Chào mừng em gia nhập MegaSoft Corp! Hãy đi dạo khám phá văn phòng 3D hoặc nhấn [E] tại bàn để mở CyberWork OS!'
       );
     }, 600);
   });
