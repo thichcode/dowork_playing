@@ -1,5 +1,7 @@
 import { globalWindowManager } from './windowManager.js';
 import { globalEventBus } from '../core/eventBus.js';
+import { globalSlackChatApp } from './apps/slackChat.js';
+import { globalJiraBoardApp } from './apps/jiraBoard.js';
 
 export class DesktopOS {
   constructor(options = {}) {
@@ -26,11 +28,23 @@ export class DesktopOS {
     this.eventBus.on('window:opened', ({ id, title }) => this.addToTaskbar(id, title));
     this.eventBus.on('window:closed', ({ id }) => this.removeFromTaskbar(id));
 
+    // Handle app open requests
+    this.eventBus.on('app:request-open', ({ appId }) => {
+      if (appId === 'slack') globalSlackChatApp.open();
+      if (appId === 'jira') globalJiraBoardApp.open();
+    });
+
     this.isInitialized = true;
   }
 
   openApp(appId) {
-    this.eventBus.emit('app:request-open', { appId });
+    if (appId === 'slack') {
+      globalSlackChatApp.open();
+    } else if (appId === 'jira') {
+      globalJiraBoardApp.open();
+    } else {
+      this.eventBus.emit('app:request-open', { appId });
+    }
   }
 
   addToTaskbar(id, title) {
