@@ -4,6 +4,7 @@ import { CHAPTER_1_DIALOGUES } from '../data/dialogues/chapter1.js';
 import { CHAPTER_2_DIALOGUES } from '../data/dialogues/chapter2.js';
 import { CHAPTER_3_DIALOGUES } from '../data/dialogues/chapter3.js';
 import { CHAPTER_4_DIALOGUES } from '../data/dialogues/chapter4.js';
+import { globalDynamicDialogue } from '../story/dynamicDialogue.js';
 
 export const CHOICE_EFFECT_TEMPLATES = {
   responsible:   { kpi: 5,  reputation: 3,  stress: 0,   energy: 0 },
@@ -35,6 +36,13 @@ export class DialogueSystem {
     };
     const chapterData = chapters[chapter] || CHAPTER_1_DIALOGUES;
     return chapterData[npcId] || null;
+  }
+
+  async startWithNPC(npcId, chapter) {
+    const dialogue = await globalDynamicDialogue.getDialogue(npcId, chapter);
+    if (dialogue) {
+      this.start(dialogue);
+    }
   }
 
   start(dialogueList) {

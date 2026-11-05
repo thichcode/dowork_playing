@@ -16,6 +16,8 @@ import { globalChapterManager } from './story/chapterManager.js';
 import { globalRandomEventsManager } from './story/randomEvents.js';
 import { globalMenuScreen } from './ui/menuScreen.js';
 import { globalResultScreen } from './ui/resultScreen.js';
+import { globalSettingsLLMModal } from './ui/settingsLLM.js';
+import { globalLLMProvider } from './core/llmProvider.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
@@ -119,11 +121,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         const nearbyNpc = globalNPCManager.nearbyNpc;
         if (nearbyNpc) {
           const chapter = globalGameState.get('chapter') || 1;
-          const dialogue = globalDialogueSystem.getDialogueForNPC(nearbyNpc.id, chapter);
-          if (dialogue) {
-            globalDialogueSystem.start(dialogue);
-            return;
-          }
+          globalDialogueSystem.startWithNPC(nearbyNpc.id, chapter);
+          return;
         }
 
         // If no NPC, check interaction zones (desk, coffee, sofa)
@@ -154,7 +153,19 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // 6. Load saved state or use initial state
   globalGameState.load();
+  const savedLLM = globalGameState.get('settings.llm');
+  if (savedLLM) {
+    globalLLMProvider.updateConfig(savedLLM);
+  }
   globalHUD.updateAll();
+
+  // Settings Modal button
+  const btnSettings = document.getElementById('btn-open-settings');
+  if (btnSettings) {
+    btnSettings.addEventListener('click', () => {
+      globalSettingsLLMModal.show();
+    });
+  }
 
   // Show Menu Screen on boot
   globalMenuScreen.show();
