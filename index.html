@@ -32,13 +32,14 @@
 
   <!-- HUD Header Overlay -->
   <header id="hud" class="fixed top-0 left-0 right-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-700/60 px-4 py-2 flex items-center justify-between text-xs select-none">
-    <!-- Player Info & Role -->
+    <!-- Player Info & Role & Room Badge -->
     <div class="flex items-center space-x-3">
       <span class="text-base">🏢</span>
       <div>
         <div class="font-bold tracking-wide text-slate-200" id="hud-player-name">Tân Binh IT</div>
         <div class="text-[10px] text-indigo-400 font-mono uppercase tracking-wider" id="hud-player-role">Frontend Dev</div>
       </div>
+      <div id="hud-room-badge" class="px-2.5 py-1 bg-indigo-950/80 border border-indigo-500/40 rounded-full text-indigo-300 font-medium text-[11px] shadow-sm ml-2">💻 IT Department</div>
     </div>
 
     <!-- Stats Bars: Energy, Stress, KPI, Rep -->
@@ -100,13 +101,14 @@
 
   <!-- Main Viewports Container -->
   <main class="relative flex-1 w-full h-full pt-12 overflow-hidden flex flex-col">
-    <!-- View 1: First-Person Desk View (Primary Workplace) -->
-    <div id="desk-view" class="w-full h-full relative flex flex-col overflow-hidden"></div>
-
-    <!-- Legacy Canvas Container (Preserved for compatibility) -->
-    <div id="office-container" class="hidden w-full h-full relative items-center justify-center bg-slate-950">
+    <!-- View 1: Office Exploration (Third-Person Walking RPG) -->
+    <div id="office-container" class="w-full h-full relative flex items-center justify-center bg-slate-950 overflow-hidden">
       <canvas id="game-canvas" width="800" height="600" class="max-w-full max-h-full rounded-md shadow-2xl border border-slate-800"></canvas>
+      <div id="interaction-prompt" class="hidden absolute bottom-6 bg-slate-900/90 text-white px-4 py-2 rounded-lg border border-indigo-500 shadow-xl text-sm font-semibold animate-pulse"></div>
     </div>
+
+    <!-- View 2: Desk & Workstation View -->
+    <div id="desk-view" class="hidden w-full h-full relative flex flex-col overflow-hidden"></div>
 
     <!-- View 2: Workstation OS Simulator View -->
     <div id="workstation-os" class="w-full h-full relative bg-slate-900 flex flex-col select-none overflow-hidden">

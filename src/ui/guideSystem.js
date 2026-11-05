@@ -60,12 +60,13 @@ export const ITEM_TOOLTIPS = {
 };
 
 export const SHORTCUTS_LIST = [
-  { key: 'Space', label: 'Zoom In/Out Màn hình' },
+  { key: 'WASD / ↑↓←→', label: 'Khám phá văn phòng' },
+  { key: 'E', label: 'Tương tác / Ngồi vào bàn' },
+  { key: 'Space', label: 'Phóng to CyberWork OS' },
   { key: '1', label: 'Uống Cà phê' },
   { key: '2', label: 'Nhấc Điện thoại' },
   { key: '3', label: 'Bóp Vịt xả stress' },
-  { key: 'P', label: 'Quầy Pantry' },
-  { key: 'M', label: 'Phòng Họp' },
+  { key: 'Esc', label: 'Rời bàn / Đứng dậy' },
   { key: '?', label: 'Cẩm Nang Hướng Dẫn' }
 ];
 

@@ -190,6 +190,12 @@ export class DeskView {
               <span>Phóng to [Space]</span>
             </button>
 
+            <!-- Stand up / Explore Office Button -->
+            <button id="btn-stand-up" class="absolute top-3 left-44 z-30 px-2.5 py-1 bg-slate-900/90 hover:bg-rose-950 text-slate-300 hover:text-rose-200 border border-slate-700 hover:border-rose-800 rounded-lg text-xs font-semibold shadow transition flex items-center space-x-1" title="Rời bàn làm việc và đi dạo trong văn phòng [Esc]">
+              <span>🚶‍♂️</span>
+              <span>Đứng dậy [Esc]</span>
+            </button>
+
             <!-- Monitor Screen Canvas / CyberWork OS Mount Target -->
             <div id="monitor-screen-mount" class="relative flex-1 w-full h-full overflow-hidden bg-slate-900">
               <!-- workstation-os element will be mounted here -->
@@ -250,6 +256,12 @@ export class DeskView {
     // Zoom button
     const btnZoom = this.container.querySelector('#btn-zoom-toggle');
     btnZoom?.addEventListener('click', () => this.toggleZoom());
+
+    // Stand up button
+    const btnStandUp = this.container.querySelector('#btn-stand-up');
+    btnStandUp?.addEventListener('click', () => {
+      this.eventBus.emit('desk:stand-up');
+    });
 
     // Coffee cup
     const coffeeEl = this.container.querySelector('#desk-coffee-cup');

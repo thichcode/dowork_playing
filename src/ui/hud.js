@@ -18,6 +18,7 @@ export class HUD {
   bindElements() {
     this.elPlayerName = document.getElementById('hud-player-name');
     this.elPlayerRole = document.getElementById('hud-player-role');
+    this.elRoomBadge = document.getElementById('hud-room-badge');
     this.elEnergyBar = document.getElementById('hud-energy-bar');
     this.elEnergyText = document.getElementById('hud-energy-text');
     this.elStressBar = document.getElementById('hud-stress-bar');
@@ -33,6 +34,11 @@ export class HUD {
   subscribeState() {
     this.eventBus.on('state:changed', () => this.updateAll());
     this.eventBus.on('time:tick', () => this.updateClock());
+    this.eventBus.on('room:changed', (room) => {
+      if (this.elRoomBadge && room) {
+        this.elRoomBadge.textContent = room.badge || room.name;
+      }
+    });
   }
 
   updateAll() {

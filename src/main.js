@@ -24,6 +24,7 @@ import { globalGuideModal } from './ui/guideModal.js';
 import { globalLocationManager } from './office/locationManager.js';
 import { globalNPCDeskManager } from './office/npcDeskManager.js';
 import { globalSoundEngine } from './audio/soundEngine.js';
+import { globalRoomTracker } from './office/roomTracker.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
@@ -84,14 +85,32 @@ window.addEventListener('DOMContentLoaded', async () => {
     workstationEl.classList.remove('hidden');
   }
 
+  // Initialize ViewManager with office container & desk view
+  const officeEl = document.getElementById('office-container');
+  const deskViewEl = document.getElementById('desk-view');
+  if (officeEl && deskViewEl) {
+    globalViewManager.init(officeEl, deskViewEl);
+    globalViewManager.switch('office');
+  }
+
   // 2. Wire workstation exit button & OS init
   globalDesktopOS.init();
   const btnLeave = document.getElementById('btn-leave-workstation');
   if (btnLeave) {
     btnLeave.addEventListener('click', () => {
-      globalDeskView.zoomOut();
+      if (globalDeskView.isZoomed) {
+        globalDeskView.zoomOut();
+      } else {
+        globalViewManager.switch('office');
+      }
     });
   }
+
+  // Stand-up from desk event -> switch back to office walking mode
+  globalEventBus.on('desk:stand-up', () => {
+    globalViewManager.switch('office');
+    globalHUD.showNotification('🚶‍♂️ Bạn đã đứng dậy khỏi bàn làm việc để đi dạo văn phòng!', 2500, 'info');
+  });
 
   // Wire hover tooltips on desk items
   const bindTooltip = (elementId, itemId) => {
@@ -126,8 +145,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (canvas && mapData) {
     globalOfficeRenderer.init(canvas, mapData);
     player = new Player({
-      startX: 3 * mapData.tileSize,
-      startY: 7 * mapData.tileSize,
+      startX: 20 * mapData.tileSize,
+      startY: 13 * mapData.tileSize,
       tileSize: mapData.tileSize
     });
   }
@@ -139,6 +158,18 @@ window.addEventListener('DOMContentLoaded', async () => {
         player.update(deltaTime, mapData.collision);
         globalNPCManager.checkProximity(player.tileX, player.tileY);
         globalInteractionZones.checkZone(player.tileX, player.tileY);
+        globalRoomTracker.update(player.tileX, player.tileY);
+
+        // Update floating interaction prompt on OfficeRenderer
+        const nearbyNpc = globalNPCManager.nearbyNpc;
+        const nearbyZone = globalInteractionZones.currentZone;
+        if (nearbyNpc) {
+          globalOfficeRenderer.setInteractionPrompt(`[E] Trò chuyện với ${nearbyNpc.name}`);
+        } else if (nearbyZone) {
+          globalOfficeRenderer.setInteractionPrompt(`[E] ${nearbyZone.label}`);
+        } else {
+          globalOfficeRenderer.clearInteractionPrompt();
+        }
       }
       globalOfficeRenderer.updateCamera(player.x, player.y);
     }
@@ -221,6 +252,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
       if (globalDeskView.isZoomed) {
         globalDeskView.zoomOut();
+      } else if (globalViewManager.currentView === 'workstation') {
+        globalViewManager.switch('office');
       }
       if (globalDialogueSystem.isActive()) {
         globalDialogueSystem.close();
@@ -257,12 +290,22 @@ window.addEventListener('DOMContentLoaded', async () => {
   });
 
   // Day 1 Onboarding Guided Walkthrough
+  globalEventBus.on('game:started', () => {
+    globalViewManager.switch('office');
+    globalHUD.showNotification('🏢 Chào mừng đến MegaSoft! Dùng [WASD / Mũi tên] để đi bộ khám phá 4 phòng ban.', 4000, 'info');
+  });
+
+  globalEventBus.on('game:continued', () => {
+    globalViewManager.switch('office');
+  });
+
   globalEventBus.on('game:role-selected', () => {
+    globalViewManager.switch('office');
     setTimeout(() => {
       globalNPCDeskManager.spawnNPC(
         'tuan_anh',
         'happy',
-        '🎉 Chào mừng em gia nhập MegaSoft Corp! Hãy nhấn [1] uống cốc cà phê khởi động, sau đó nhấn [Space] để phóng to màn hình vào CyberWork OS nhận task đầu tiên nhé!'
+        '🎉 Chào mừng em gia nhập MegaSoft Corp! Hãy đi dạo khám phá văn phòng hoặc nhấn [E] tại bàn để mở CyberWork OS!'
       );
     }, 600);
   });
