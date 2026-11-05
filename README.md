@@ -1,6 +1,6 @@
-# 🏢 MegaSoft Corp: 60 Ngày Thử Việc (IT Probation RPG)
+# 🏢 MegaSoft Corp: 60 Ngày Thử Việc (First-Person IT Probation RPG)
 
-> **Webgame nhập vai sinh tồn nghề nghiệp IT chân thực & hài hước** dành cho kỹ sư phần mềm, lập trình viên, tester và DevOps trong một công ty công nghệ lớn.
+> **Webgame mô phỏng bàn làm việc góc nhìn thứ nhất (First-Person Desk Simulator) & sinh tồn nghề nghiệp IT chân thực, hài hước** dành cho kỹ sư phần mềm, lập trình viên, tester và DevOps trong một công ty công nghệ lớn.
 
 ---
 
@@ -8,67 +8,68 @@
 
 Bạn vừa trúng tuyển vào **MegaSoft Corp** — tập đoàn phần mềm hàng đầu với quy mô hàng nghìn nhân sự. Trước mắt bạn là kỳ **thử việc 60 ngày** đầy thách thức, nơi bạn phải chứng minh năng lực chuyên môn, khả năng chịu áp lực, xử lý sự cố và nghệ thuật sinh tồn nơi công sở IT.
 
-Trò chơi kết hợp phong cách **2D Pixel Art Top-Down** khi đi lại trong văn phòng và **Hệ điều hành máy tính ảo (CyberWork OS)** khi ngồi vào bàn làm việc kỹ thuật.
+Trò chơi đặt bạn vào **Góc nhìn thứ nhất (First-Person)** ngay tại chiếc bàn làm việc của một tân binh IT:
+- Ngồi đối diện chiếc máy tính chạy **Hệ điều hành ảo CyberWork OS** (nhấn `[Space]` hoặc click để phóng to toàn màn hình làm việc).
+- Tương tác vật lý trực tiếp với các đồ vật trên bàn: **Cốc Cà Phê** hồi phục thể lực, **Điện Thoại Bàn** reo chuông khi có sự cố khẩn cấp, **Vịt Cao Su** xả stress, **Giấy Ghi Chú** dán viền màn hình.
+- Các NPC (Sếp Tuấn Anh, PM Hùng, Senior Minh, QA Trang) xuất hiện trực diện trước mặt bạn với biểu cảm sống động.
+- Chuyển đổi nhanh qua lại giữa **Bàn làm việc (Desk)**, **Quầy Pantry** (uống trà, hóng drama) và **Phòng Họp** (Daily Scrum).
 
 ---
 
 ## ✨ Tính Năng Nổi Bật
 
-### 1. Bốn Vị Trí Chuyên Môn (Roles)
-- 🎨 **Frontend Developer**: Cân đối CSS, responsive, fix bug giao diện, tối ưu trải nghiệm người dùng.
-- ⚙️ **Backend Developer**: Xếp pipeline middleware API, soi log máy chủ tìm root cause nghẽn database.
-- 🐞 **QA / Tester**: Săn bug ẩn trên giao diện thực tế, thiết kế ma trận kiểm thử (Test Case Matrix).
-- 🚀 **DevOps / SRE**: Sửa lỗi cú pháp file CI/CD YAML, điều phối giải cứu Production Incident lúc nửa đêm.
+### 1. Giao Diện Góc Nhìn Thứ Nhất (First-Person Desk Simulator)
+- 🖥️ **Màn hình CyberWork OS**: Trung tâm làm việc, hỗ trợ zoom in/out mượt mà bằng phím `[Space]`.
+- ☕ **Cốc Cà Phê Gốm MegaSoft**: Nhấn `[1]` hoặc click để húp 1 ngụm cà phê, hồi `+15 ⚡ Energy`, giảm `-5 🔥 Stress` (tối đa 3 cốc/ngày, reset mỗi ngày mới).
+- ☎️ **Điện Thoại Bàn Báo Động**: Khi có biến cố, điện thoại sẽ rung lắc và chuông reo "Rrrrring!". Nhấn `[2]` hoặc click để nhấc máy.
+- 🦆 **Vịt Cao Su (Rubber Duck)**: Nhấn `[3]` hoặc click để bóp vịt "Chít chít", giảm `-2 🔥 Stress` (Rubber Duck Debugging).
+- 💡 **Thanh Guide Bar & Hover Tooltips**: Luôn hiển thị danh mục phím tắt ở đáy màn hình; rê chuột vào bất kỳ vật phẩm nào đều hiện tooltip giải thích công dụng chi tiết.
+- ❓ **Cẩm Nang Thử Việc `[?]`**: Tra cứu nhanh luật chơi, cơ chế điểm số (Energy, Stress, KPI, Rep) và cách phòng tránh Burnout.
 
-### 2. Bốn Chương Cốt Truyện Kịch Tính (Storyline)
-1. **Chương 1: Onboarding & Văn hóa Công ty**: Làm quen mentor, cài đặt môi trường `npm install` lỗi version, uống cà phê pantry, học quy trình bảo mật.
-2. **Chương 2: Sprint Đầu Tiên**: Nhận ticket Jira, họp Daily Scrum, đối mặt yêu cầu thay đổi gấp từ Product Manager.
-3. **Chương 3: Cơn Khủng Hoảng Production**: 23:00 đêm sập server thanh toán, báo động đỏ toàn công ty, tìm nguyên nhân và rollback an toàn.
-4. **Chương 4: Đánh Giá Thử Việc (1-on-1)**: Buổi phỏng vấn định mệnh với Giám đốc Kỹ thuật Tuấn Anh, chất vấn về KPI, văn hóa và tinh thần trách nhiệm.
+### 2. Bốn Vị Trí Chuyên Môn & 16+ Nhiệm Vụ Kèm Plot Twist
+- 🎨 **Frontend Developer**: Sửa CSS vỡ layout, căn giữa modal, Dark Mode khẩn cấp, fix Safari cũ, tối ưu Accessibility chuẩn WCAG.
+- ⚙️ **Backend Developer**: Xếp API Middleware Pipeline, soi log truy tìm Deadlock, vá Webhook thanh toán thiếu Signature, tối ưu truy vấn Database.
+- 🐞 **QA / Tester**: Săn 5 lỗi giỏ hàng, thiết kế Test Case Matrix (Happy/Boundary/Negative/Security), vạch trần lỗ hổng IDOR & SQL Injection.
+- 🚀 **DevOps / SRE**: Sửa lỗi thụt lề YAML CI/CD, điều phối quy trình ứng cứu sự cố SRE 5 bước, cứu cụm Kubernetes Pod CrashLoopBackOff, diễn tập Zero-Downtime Rollout.
 
-### 3. Tám Kỹ Năng Kỹ Thuật (Interactive Minigames)
-- **CSS Layout Fixer**: Chọn thuộc tính Flexbox/Grid chuẩn xác để cứu vỡ giao diện.
-- **UI Bug Hunt**: Tìm và nhấp vào các phần tử giao diện hiển thị sai lệch trước khi hết giờ.
-- **API Pipeline Middleware**: Sắp xếp trình tự Auth → RateLimit → Validator → Controller.
-- **Log Detective**: Soi hàng trăm dòng log server để phát hiện chính xác dòng gây crash.
-- **Test Case Builder**: Phân loại kịch bản kiểm thử vào đúng nhóm Happy / Boundary / Negative.
-- **Bug Spotter**: Phát hiện các lỗi sai lệch dữ liệu ngầm và mismatch state.
-- **YAML Surgeon**: Chẩn đoán và sửa lỗi thụt đầu dòng (indentation) và sai cú pháp Docker Compose/K8s.
-- **Incident Commander**: Thực hiện quy trình ứng cứu khẩn cấp 5 bước theo đúng thứ tự chuẩn SRE.
+### 3. Động Cơ Biến Cố Bất Ngờ (Mid-Task Plot Twists) & Tech Insights
+- Giữa lúc giải minigame, các tình huống đời thực oái oăm sẽ ập đến:
+  - Khách VIP đòi Dark Mode trong 60 giây.
+  - Cổng thanh toán bên thứ ba gửi Webhook không chữ ký số.
+  - Bạn thực tập sinh chạy query không index làm lock sạch DB.
+  - Developer cãi: *"Ơ máy anh chạy bình thường mà em?!"*.
+- Sau mỗi nhiệm vụ, game hiển thị **"Góc Nhìn Thực Tế (Tech Insight)"** đúc kết bài học kỹ thuật chuyên sâu từ các tập đoàn công nghệ lớn.
 
-### 4. Hệ Thống 5 Kết Thúc Đa Dạng
+### 4. Hệ Thống 5 Kết Thúc & Biểu Đồ Radar Đánh Giá Năng Lực
 - 🏆 **Chính thức xuất sắc (Senior Rookie)**: KPI ≥ 85, Uy tín ≥ 70, ký hợp đồng chính thức vượt kỳ vọng kèm tăng lương.
 - ✅ **Đạt yêu cầu thử việc (Probation Passed)**: Ký hợp đồng lao động chính thức 1 năm tiêu chuẩn.
 - ⏳ **Gia hạn thử việc thêm 30 ngày (Extended Probation)**: Hiệu suất chưa đạt kỳ vọng nhưng thể hiện thái độ cầu thị.
 - ❌ **Không đạt thử việc (Failed Probation)**: Bị từ chối ký tiếp do KPI thấp hoặc dính vi phạm nghiêm trọng.
 - 💥 **Burnout Thất Bại (Burnout Collapse)**: Mức Stress chạm ngưỡng 95% do OT liên tục và kiệt sức!
+- Biểu đồ Radar 5 trục hiển thị trực quan vào ngày thứ 60: Performance, Quality, Delivery, Culture, Stability.
 
-### 5. Biểu Đồ Radar Đánh Giá Năng Lực (Skill Radar Chart)
-Vào ngày thứ 60, hệ thống tự động tính toán và hiển thị đồ thị Radar 5 cạnh chi tiết:
-- 📈 **Hiệu suất công việc (Performance)**
-- 💎 **Chất lượng code / kiểm thử (Quality)**
-- ⏰ **Đúng tiến độ (Delivery)**
-- 🤝 **Văn hóa & Đồng đội (Culture)**
-- 🛡️ **Độ ổn định & Chịu áp lực (Stability)**
-
-### 6. Cốt Truyện Tích Hợp AI LLM Động (Dynamic Storytelling)
-- Hỗ trợ kết nối trực tiếp với **Google Gemini (Gemini 2.0 Flash)** và **OpenAI (GPT-4o mini)**.
+### 5. Cốt Truyện Tích Hợp AI LLM Động (Dynamic Storytelling)
+- Hỗ trợ kết nối trực tiếp với **Google Gemini (Gemini 2.0 Flash - siêu nhanh)** và **OpenAI (GPT-4o mini)**.
 - Khi bật chế độ LLM, NPC sẽ đối thoại biến đổi linh hoạt theo diễn biến thật của từng ván chơi (chỉ số KPI, stress, quyết định trước đó).
 - Chế độ **Offline tĩnh** dựng sẵn đầy đủ kịch bản, chạy mượt mà ngay cả khi không có kết nối internet hoặc API Key.
 
-### 7. Hiệu Ứng Âm Thanh 8-bit Hoài Niệm (Web Audio Synth)
-- Động cơ âm thanh viết bằng **Web Audio API** nguyên bản: âm thanh gõ phím cạch cạch, tiếng chuông hết giờ, tiếng nổ bug, tiếng thành công và giai điệu BGM thư giãn không dùng file âm thanh ngoài.
+### 6. Hiệu Ứng Âm Thanh 8-bit Hoài Niệm (Web Audio Synth)
+- Động cơ âm thanh viết bằng **Web Audio API** nguyên bản: âm thanh gõ switch cơ, chuông điện thoại bàn, tiếng húp cà phê, tiếng vịt kêu, chuông hết giờ, tiếng nổ bug, tiếng thành công và giai điệu BGM thư giãn không dùng file âm thanh ngoài.
 
 ---
 
-## ⌨️ Phím Điều Khiển
+## ⌨️ Phím Điều Khiển (Shortcuts)
 
 | Phím | Hành Động |
 |---|---|
-| `W`, `A`, `S`, `D` hoặc `Mũi tên` | Di chuyển nhân vật trong văn phòng |
-| `E` | Tương tác (Nói chuyện NPC, Uống cà phê Pantry, Ngồi vào máy bàn) |
-| `Esc` | Đóng hội thoại / Đóng bảng thông báo popup |
-| `Tab` / `Click chuột` | Chuyển đổi và tương tác với các ứng dụng trong CyberWork OS |
+| `Space` | Phóng to / Thu nhỏ Màn hình máy tính (CyberWork OS Focus) |
+| `1` | Uống cà phê gốm (+15 Energy, -5 Stress) |
+| `2` | Nhấc điện thoại bàn khi có chuông reo |
+| `3` | Bóp vịt cao su (-2 Stress) |
+| `P` | Di chuyển đến Quầy Pantry (uống trà, hóng drama) |
+| `M` | Di chuyển đến Phòng Họp (Daily Scrum Standup) |
+| `?` | Mở Cẩm Nang Sống Sót 60 Ngày Thử Việc |
+| `Esc` | Đóng hội thoại / Đóng bảng thông báo / Lùi về góc nhìn bàn làm việc |
 
 ---
 
@@ -82,7 +83,7 @@ Vào ngày thứ 60, hệ thống tự động tính toán và hiển thị đ�
 # 1. Di chuyển vào thư mục dự án
 cd game_thuviec
 
-# 2. Chạy bộ kiểm thử tự động (38 unit tests)
+# 2. Chạy bộ kiểm thử tự động (50 unit tests)
 npm test
 
 # 3. Khởi động máy chủ phát triển cục bộ
@@ -99,26 +100,18 @@ Mở trình duyệt truy cập: `http://localhost:3000` (hoặc cổng mà serve
 
 Game được xây dựng dưới dạng **Static SPA (Single Page Application)** thuần Vanilla ES Modules, tối ưu hóa cho zero-config deployment trên Vercel:
 
-### Cách 1: Dùng Vercel CLI
 ```bash
-# Cài đặt Vercel CLI (nếu chưa có)
-npm install -g vercel
-
-# Deploy lên môi trường Production
+# Deploy trực tiếp qua Vercel CLI
 npx vercel --prod
 ```
-
-### Cách 2: Deploy qua Vercel Dashboard (GitHub / Git)
-1. Đẩy code lên GitHub repository.
-2. Đăng nhập vào [vercel.com](https://vercel.com) → Chọn **Add New Project**.
-3. Chọn repository và bấm **Deploy** (không cần cấu hình thêm Build Command hay Output Directory).
+Hoặc liên kết repository [https://github.com/thichcode/dowork_playing](https://github.com/thichcode/dowork_playing) trên Vercel Dashboard để tự động CI/CD.
 
 ---
 
 ## 🛠️ Công Nghệ Sử Dụng
 
 - **Front-end**: HTML5 Canvas 2D, Pure Vanilla JavaScript (ES6+ Modules), Tailwind CSS.
-- **Audio**: Web Audio API (Square & Triangle Wave 8-bit Synthesizer).
+- **Audio**: Web Audio API (Synthesized BGM & SFX: phone ring, duck squeak, coffee sip, mechanical switch).
 - **Trí tuệ nhân tạo**: Google Gemini API & OpenAI Chat Completions API.
 - **Kiểm thử**: Node.js Native Test Runner (`node --test`).
 - **Lưu trữ**: Trình duyệt `localStorage` an toàn với cơ chế fallback tự động.
