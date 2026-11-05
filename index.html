@@ -4,11 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MegaSoft Corp: 60 Ngày Thử Việc — IT Probation RPG</title>
+  <meta name="description" content="MegaSoft Corp: 60 Ngày Thử Việc — Game nhập vai mô phỏng thực tế trải nghiệm thử việc các vị trí Frontend, Backend, QA, DevOps trong công ty công nghệ lớn với hệ thống Workstation OS và tích hợp AI LLM.">
+  <meta property="og:title" content="MegaSoft Corp: 60 Ngày Thử Việc — IT Probation RPG">
+  <meta property="og:description" content="Nhập vai thử việc 4 vị trí IT thực chiến: Frontend, Backend, Tester, DevOps. Thử thách giải cứu production, cân bằng KPI và mức độ Stress!">
+  <meta name="theme-color" content="#0f172a">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden flex flex-col">
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="relative w-16 h-16 mb-4 flex items-center justify-center">
+      <div class="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+      <span class="absolute text-2xl">🏢</span>
+    </div>
+    <div class="font-bold text-lg text-indigo-400 font-mono tracking-wider mb-1">MEGASOFT CORP</div>
+    <div class="text-xs text-slate-400 font-mono">Đang khởi động hệ thống thử việc IT...</div>
+  </div>
+
+  <!-- Mobile / Small screen notice -->
+  <div class="lg:hidden fixed bottom-2 left-2 right-2 z-50 bg-amber-950/90 border border-amber-600/80 text-amber-200 text-[11px] p-2.5 rounded-xl shadow-lg flex items-center justify-between pointer-events-auto">
+    <span>💡 Game tối ưu nhất trên Desktop/Laptop (≥ 1024px). Trên điện thoại, hãy xoay ngang màn hình.</span>
+    <button onclick="this.parentElement.remove()" class="ml-2 px-2 py-0.5 bg-amber-800 text-white rounded text-[10px]">✕</button>
+  </div>
 
   <!-- HUD Header Overlay -->
   <header id="hud" class="fixed top-0 left-0 right-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-700/60 px-4 py-2 flex items-center justify-between text-xs select-none">

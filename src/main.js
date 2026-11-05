@@ -173,5 +173,25 @@ window.addEventListener('DOMContentLoaded', async () => {
   // 7. Start Game Loop
   globalGameLoop.start();
 
+  // Escape key handler for accessible modal dismissal
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('modal-container');
+      if (modal && !modal.classList.contains('hidden')) {
+        modal.classList.add('hidden');
+      }
+      if (globalDialogueSystem.isActive()) {
+        globalDialogueSystem.close();
+      }
+    }
+  });
+
+  // Fade out & dismiss preloader
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    preloader.style.opacity = '0';
+    setTimeout(() => preloader.remove(), 500);
+  }
+
   console.log('Office Map, Player, NPCs, Dialogue & Zones initialized successfully!');
 });

@@ -58,6 +58,31 @@ body {
   transition: transform 0.15s ease-out, opacity 0.15s ease-out;
 }
 
+/* Viewport Fade Transitions */
+#office-container, #workstation-os {
+  transition: opacity 0.25s ease-in-out;
+}
+
+.view-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.view-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Pulse / Interactive Highlights */
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+}
+
+.pulse-soft {
+  animation: softPulse 2s infinite ease-in-out;
+}
+
 /* Scanline / CRT overlay (subtle retro feel) */
 .crt-overlay::after {
   content: " ";
