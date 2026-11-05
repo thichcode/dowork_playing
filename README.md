@@ -1,6 +1,6 @@
-# 🏢 MegaSoft Corp: 60 Ngày Thử Việc (Third-Person Walking Office RPG & Desk Simulator)
+# 🏢 MegaSoft Corp: 60 Ngày Thử Việc (3D Isometric Office RPG & Desk Simulator)
 
-> **Webgame kết hợp nhập vai đi bộ khám phá văn phòng góc nhìn thứ ba (Third-Person Walking RPG) & mô phỏng bàn làm việc góc nhìn thứ nhất (First-Person Desk Simulator)** dành cho kỹ sư phần mềm, lập trình viên, tester và DevOps trong một tập đoàn công nghệ lớn.
+> **Webgame kết hợp nhập vai khám phá không gian văn phòng 3D Isometric Low-Poly ("The Sims / Game Dev Tycoon" style) & mô phỏng bàn làm việc góc nhìn thứ nhất (First-Person Desk Simulator)** dành cho kỹ sư phần mềm, lập trình viên, tester và DevOps trong một tập đoàn công nghệ lớn.
 
 ---
 
@@ -9,12 +9,16 @@
 Bạn vừa trúng tuyển vào **MegaSoft Corp** — tập đoàn phần mềm hàng đầu với quy mô hàng nghìn nhân sự. Trước mắt bạn là kỳ **thử việc 60 ngày** đầy thách thức, nơi bạn phải chứng minh năng lực chuyên môn, khả năng chịu áp lực, xử lý sự cố và nghệ thuật sinh tồn nơi công sở IT.
 
 Trò chơi kết hợp 2 trải nghiệm độc đáo:
-1. **Góc nhìn thứ ba (Third-Person Walking RPG)**: Tự do điều khiển avatar nhân vật di chuyển bằng `[WASD / Mũi tên]` khám phá bản đồ văn phòng mở rộng 32x20 ô (1024x640px) với camera follow mượt mà qua 4 phòng ban chính:
-   - 💻 **Phòng Kỹ Thuật IT**: Nơi đặt bàn làm việc của bạn và Tech Lead Đức, Senior Dev Minh.
-   - ☕ **Quầy Pantry & Lounge**: Máy pha cà phê Espresso, tủ lạnh nước mát, ghế sofa êm ái nghỉ ngơi và trò chuyện cùng HR Lan, QA Trang.
-   - 📊 **Phòng Họp Alpha**: Bàn họp oval kính dài, bảng Kanban Scrum, nơi gặp PM Hùng bàn deadline và Sprint Review.
-   - 🖥️ **Phòng Server Datacenter**: Hệ thống tủ rack máy chủ với đèn LED chớp nháy và DevOps SRE Khoa canh giữ 24/7.
-2. **Góc nhìn thứ nhất (First-Person Desk Simulator)**: Khi đi tới bàn làm việc và nhấn `[E]`, bạn ngồi vào bàn với chiếc máy tính chạy **CyberWork OS** (nhấn `[Space]` để zoom in/out), nhấp cà phê `[1]`, nhấc máy khi điện thoại bàn reo `[2]`, bóp vịt cao su `[3]`, và có thể đứng dậy đi dạo bất cứ lúc nào bằng nút "Đứng dậy [Esc]".
+1. **Không gian 3D Isometric Low-Poly (Three.js WebGL)**:
+   - Dựng toàn bộ 4 phòng ban với kiến trúc tường cắt vát thấp (*The Sims* style) không che khuất góc nhìn:
+     - 💻 **Phòng Kỹ Thuật IT**: Bàn làm việc của bạn cùng Senior Dev Minh và Tech Lead Đức.
+     - ☕ **Quầy Pantry & Lounge**: Quầy bar gỗ sồi, máy pha cà phê Espresso, tủ lạnh 2 cánh, ghế sofa nệm da êm ái cùng HR Lan và QA Trang.
+     - 📊 **Phòng Họp Alpha**: Bàn họp oval kính dài, hàng ghế xoay, bảng Kanban Scrum cùng PM Hùng.
+     - 🖥️ **Phòng Server Datacenter**: Hệ thống tủ rack máy chủ với dải đèn LED phát sáng nhấp nháy (Emissive pulse) và DevOps SRE Khoa canh giữ 24/7.
+   - **Avatar 3D & Animation**: Nhân vật 3D Low-Poly cử động tay chân nhịp nhàng khi bước đi, đổi trang phục theo Role đã chọn.
+   - **Xoay Camera 360° & Zoom**: Kéo chuột để xoay quanh văn phòng, lăn chuột để phóng to/thu nhỏ.
+   - **Chuyển đổi 3D / 2D tức thì**: Nút `[🎮 3D / 2D]` trên thanh HUD cho phép chuyển đổi qua lại giữa đồ họa 3D hiện đại và phong cách Pixel Retro 2D bất kỳ lúc nào.
+2. **Góc nhìn thứ nhất (First-Person Desk Simulator)**: Khi đi tới bàn làm việc và nhấn `[E]`, camera lướt vào bàn làm việc với chiếc máy tính chạy **CyberWork OS** (nhấn `[Space]` để zoom in/out), nhấp cà phê `[1]`, nhấc máy khi điện thoại bàn reo `[2]`, bóp vịt cao su `[3]`, và có thể nhấn "Đứng dậy [Esc]" để lùi về góc nhìn 3D Isometric dạo chơi tiếp.
 
 ---
 
@@ -62,9 +66,11 @@ Trò chơi kết hợp 2 trải nghiệm độc đáo:
 
 ## ⌨️ Phím Điều Khiển (Shortcuts)
 
-| Phím | Hành Động |
+| Phím / Chuột | Hành Động |
 |---|---|
-| `W A S D` / `↑ ↓ ← →` | Đi bộ di chuyển avatar khám phá văn phòng qua 4 phòng ban |
+| `W A S D` / `↑ ↓ ← →` | Đi bộ di chuyển avatar 3D khám phá văn phòng qua 4 phòng ban |
+| `Kéo Chuột` (Mouse Drag) | Xoay góc nhìn 3D Isometric 360° quanh văn phòng |
+| `Lăn Chuột` (Mouse Wheel) | Phóng to / Thu nhỏ góc nhìn camera 3D |
 | `E` | Tương tác ngữ cảnh (Ngồi vào bàn làm việc, nói chuyện NPC, pha cafe, mở tủ lạnh) |
 | `Space` | Phóng to / Thu nhỏ Màn hình máy tính CyberWork OS |
 | `1` | Uống cà phê gốm (+15 Energy, -5 Stress) |
@@ -85,7 +91,7 @@ Trò chơi kết hợp 2 trải nghiệm độc đáo:
 # 1. Di chuyển vào thư mục dự án
 cd game_thuviec
 
-# 2. Chạy bộ kiểm thử tự động (56 unit tests)
+# 2. Chạy bộ kiểm thử tự động (69 unit tests)
 npm test
 
 # 3. Khởi động máy chủ phát triển cục bộ
