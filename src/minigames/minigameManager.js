@@ -5,6 +5,12 @@ import { globalHUD } from '../ui/hud.js';
 
 import { CssLayoutFixMinigame } from './frontend/cssLayoutFix.js';
 import { BugHuntUIMinigame } from './frontend/bugHuntUI.js';
+import { ApiPipelineMinigame } from './backend/apiPipeline.js';
+import { LogDetectiveMinigame } from './backend/logDetective.js';
+import { BugSpotterMinigame } from './qa/bugSpotter.js';
+import { TestCaseBuilderMinigame } from './qa/testCaseBuilder.js';
+import { YamlSurgeonMinigame } from './devops/yamlSurgeon.js';
+import { IncidentCommanderMinigame } from './devops/incidentCommander.js';
 
 export class MinigameManager {
   constructor(options = {}) {
@@ -26,12 +32,28 @@ export class MinigameManager {
 
   createMinigameInstance(type) {
     switch (type) {
+      // Frontend
       case 'cssLayoutFix':
         return new CssLayoutFixMinigame();
       case 'bugHuntUI':
         return new BugHuntUIMinigame();
+      // Backend
+      case 'apiPipeline':
+        return new ApiPipelineMinigame();
+      case 'logDetective':
+        return new LogDetectiveMinigame();
+      // QA
+      case 'bugSpotter':
+        return new BugSpotterMinigame();
+      case 'testCaseBuilder':
+        return new TestCaseBuilderMinigame();
+      // DevOps
+      case 'yamlSurgeon':
+        return new YamlSurgeonMinigame();
+      case 'incidentCommander':
+        return new IncidentCommanderMinigame();
       default:
-        // Will be extended for Backend, QA, DevOps in Task 10
+        console.warn(`Minigame type ${type} not registered`);
         return null;
     }
   }
