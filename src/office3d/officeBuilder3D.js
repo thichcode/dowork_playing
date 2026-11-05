@@ -11,7 +11,11 @@ export const ROOM_PALETTES = {
 
 export class OfficeBuilder3D {
   constructor(options = {}) {
-    this.THREE = options.THREE || THREE_DEFAULT;
+    if (options && (options.Group || options.Mesh || options.Scene)) {
+      this.THREE = options;
+    } else {
+      this.THREE = (options && options.THREE) || THREE_DEFAULT;
+    }
   }
 
   buildOffice(mapData) {
@@ -171,14 +175,14 @@ export class OfficeBuilder3D {
     const furnitureGroup = new THREE.Group();
     furnitureGroup.name = 'furniture';
 
-    // Player Desk & Tech Lead Desk in IT Room
+    // Player Desk & Tech Lead Desk in IT Room (High-detail with laptop, mesh chair, mouse)
     const deskPos = tileTo3D(20, 14, tileSize);
-    const pDesk = this.createDeskMesh();
+    const pDesk = this.createDetailedDeskMesh();
     pDesk.position.set(deskPos.x, 0, deskPos.z);
     furnitureGroup.add(pDesk);
 
     const leadDeskPos = tileTo3D(24, 17, tileSize);
-    const lDesk = this.createDeskMesh();
+    const lDesk = this.createDetailedDeskMesh();
     lDesk.position.set(leadDeskPos.x, 0, leadDeskPos.z);
     furnitureGroup.add(lDesk);
 
@@ -196,11 +200,16 @@ export class OfficeBuilder3D {
       furnitureGroup.add(rack);
     }
 
-    // Pantry Furniture: Coffee bar, Fridge, Sofa
+    // Pantry Furniture: Coffee bar, Fridge, Sofa, and Water Cooler Dispenser
     const coffeePos = tileTo3D(26, 1, tileSize);
     const coffeeBar = this.createCoffeeBarMesh();
     coffeeBar.position.set(coffeePos.x, 0, coffeePos.z);
     furnitureGroup.add(coffeeBar);
+
+    const coolerPos = tileTo3D(23, 1, tileSize);
+    const cooler = this.createWaterCoolerMesh();
+    cooler.position.set(coolerPos.x, 0, coolerPos.z);
+    furnitureGroup.add(cooler);
 
     const fridgePos = tileTo3D(29, 1, tileSize);
     const fridge = this.createFridgeMesh();
@@ -212,14 +221,313 @@ export class OfficeBuilder3D {
     sofa.position.set(sofaPos.x, 0, sofaPos.z);
     furnitureGroup.add(sofa);
 
-    // Meeting Room Table & Chairs
+    // Meeting Room Table & Whiteboard with Post-it Notes
     const meetingPos = tileTo3D(5, 14, tileSize);
     const mTable = this.createMeetingTableMesh();
     mTable.position.set(meetingPos.x, 0, meetingPos.z);
     furnitureGroup.add(mTable);
 
+    const boardPos = tileTo3D(2, 11, tileSize);
+    const wBoard = this.createWhiteboardMesh();
+    wBoard.position.set(boardPos.x, 0, boardPos.z);
+    furnitureGroup.add(wBoard);
+
     officeGroup.add(furnitureGroup);
     return officeGroup;
+  }
+
+  createDetailedDeskMesh(options = {}) {
+    const THREE = this.THREE;
+    const group = new THREE.Group();
+    group.name = options.name || 'detailed_desk';
+
+    // Tabletop
+    const topGeo = new THREE.BoxGeometry(2.0, 0.08, 1.1);
+    const topMat = new THREE.MeshLambertMaterial({ color: 0x94a3b8 });
+    const top = new THREE.Mesh(topGeo, topMat);
+    top.position.y = 0.75;
+    top.name = 'desk_top';
+    group.add(top);
+
+    // Legs (4 metal legs with feet)
+    const legGeo = new THREE.BoxGeometry(0.06, 0.75, 0.06);
+    const legMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+    const legPositions = [
+      [-0.9, 0.375, -0.45],
+      [0.9, 0.375, -0.45],
+      [-0.9, 0.375, 0.45],
+      [0.9, 0.375, 0.45]
+    ];
+    for (let i = 0; i < legPositions.length; i++) {
+      const [lx, ly, lz] = legPositions[i];
+      const leg = new THREE.Mesh(legGeo, legMat);
+      leg.position.set(lx, ly, lz);
+      leg.name = `desk_leg_${i}`;
+      group.add(leg);
+    }
+
+    // Laptop on Desk
+    const laptopGroup = new THREE.Group();
+    laptopGroup.name = 'laptop';
+    laptopGroup.position.set(-0.2, 0.79, 0.05);
+
+    // Laptop Base
+    const lapBaseGeo = new THREE.BoxGeometry(0.55, 0.02, 0.38);
+    const lapBaseMat = new THREE.MeshLambertMaterial({ color: 0x334155 });
+    const lapBase = new THREE.Mesh(lapBaseGeo, lapBaseMat);
+    lapBase.name = 'laptop_base';
+    laptopGroup.add(lapBase);
+
+    // Laptop Keyboard
+    const kbGeo = new THREE.BoxGeometry(0.48, 0.005, 0.22);
+    const kbMat = new THREE.MeshLambertMaterial({ color: 0x0f172a });
+    const kb = new THREE.Mesh(kbGeo, kbMat);
+    kb.position.set(0, 0.012, 0.04);
+    kb.name = 'laptop_keyboard';
+    laptopGroup.add(kb);
+
+    // Laptop Screen (Open lid, tilted back with glowing emissive matrix)
+    const screenGeo = new THREE.BoxGeometry(0.55, 0.36, 0.02);
+    const screenMat = new THREE.MeshLambertMaterial({
+      color: 0x0f172a,
+      emissive: 0x0284c7,
+      emissiveIntensity: 0.6
+    });
+    const lapScreen = new THREE.Mesh(screenGeo, screenMat);
+    lapScreen.position.set(0, 0.18, -0.18);
+    lapScreen.rotation.x = -0.2;
+    lapScreen.name = 'laptop_screen';
+    laptopGroup.add(lapScreen);
+
+    group.add(laptopGroup);
+
+    // Mousepad & Optical Mouse
+    const padGeo = new THREE.BoxGeometry(0.32, 0.005, 0.36);
+    const padMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+    const mousepad = new THREE.Mesh(padGeo, padMat);
+    mousepad.position.set(0.5, 0.793, 0.05);
+    mousepad.name = 'mousepad';
+    group.add(mousepad);
+
+    const mouseGeo = new THREE.BoxGeometry(0.1, 0.03, 0.16);
+    const mouseMat = new THREE.MeshLambertMaterial({ color: 0x64748b });
+    const mouse = new THREE.Mesh(mouseGeo, mouseMat);
+    mouse.position.set(0.5, 0.81, 0.05);
+    mouse.name = 'mouse';
+    group.add(mouse);
+
+    // Small Desk Succulent Pot
+    const succPotGeo = new THREE.CylinderGeometry(0.08, 0.06, 0.1, 8);
+    const succPotMat = new THREE.MeshLambertMaterial({ color: 0xf8fafc });
+    const succPot = new THREE.Mesh(succPotGeo, succPotMat);
+    succPot.position.set(-0.7, 0.84, -0.3);
+    succPot.name = 'desk_succulent_pot';
+    group.add(succPot);
+
+    const plantBudGeo = new THREE.DodecahedronGeometry(0.07);
+    const plantBudMat = new THREE.MeshLambertMaterial({ color: 0x22c55e });
+    const plantBud = new THREE.Mesh(plantBudGeo, plantBudMat);
+    plantBud.position.set(-0.7, 0.92, -0.3);
+    plantBud.name = 'desk_succulent';
+    group.add(plantBud);
+
+    // Ergonomic Mesh Chair
+    const chairGroup = new THREE.Group();
+    chairGroup.name = 'chair';
+    chairGroup.position.set(0, 0, 0.7);
+
+    // Swivel Base
+    const baseGeo = new THREE.CylinderGeometry(0.3, 0.35, 0.06, 6);
+    const baseMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+    const chairBase = new THREE.Mesh(baseGeo, baseMat);
+    chairBase.position.y = 0.05;
+    chairBase.name = 'chair_base';
+    chairGroup.add(chairBase);
+
+    // Stem
+    const stemGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.38, 8);
+    const stemMat = new THREE.MeshLambertMaterial({ color: 0x64748b });
+    const chairStem = new THREE.Mesh(stemGeo, stemMat);
+    chairStem.position.y = 0.24;
+    chairStem.name = 'chair_stem';
+    chairGroup.add(chairStem);
+
+    // Cushioned Seat
+    const seatGeo = new THREE.BoxGeometry(0.55, 0.08, 0.52);
+    const seatMat = new THREE.MeshLambertMaterial({ color: 0x0f172a });
+    const chairSeat = new THREE.Mesh(seatGeo, seatMat);
+    chairSeat.position.y = 0.47;
+    chairSeat.name = 'chair_seat';
+    chairGroup.add(chairSeat);
+
+    // Ergonomic Curved Mesh Backrest
+    const backGeo = new THREE.BoxGeometry(0.5, 0.6, 0.06);
+    const backMat = new THREE.MeshLambertMaterial({ color: 0x334155 });
+    const chairBack = new THREE.Mesh(backGeo, backMat);
+    chairBack.position.set(0, 0.77, 0.25);
+    chairBack.rotation.x = -0.1;
+    chairBack.name = 'chair_back';
+    chairGroup.add(chairBack);
+
+    // Armrests
+    const armGeo = new THREE.BoxGeometry(0.06, 0.2, 0.3);
+    const armMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+    const armL = new THREE.Mesh(armGeo, armMat);
+    armL.position.set(-0.3, 0.6, 0.05);
+    chairGroup.add(armL);
+    const armR = new THREE.Mesh(armGeo, armMat);
+    armR.position.set(0.3, 0.6, 0.05);
+    chairGroup.add(armR);
+
+    group.add(chairGroup);
+
+    return group;
+  }
+
+  createWaterCoolerMesh() {
+    const THREE = this.THREE;
+    const group = new THREE.Group();
+    group.name = 'water_cooler';
+
+    // Stand Cabinet (White/Light grey)
+    const standGeo = new THREE.BoxGeometry(0.55, 1.0, 0.55);
+    const standMat = new THREE.MeshLambertMaterial({ color: 0xe2e8f0 });
+    const stand = new THREE.Mesh(standGeo, standMat);
+    stand.position.y = 0.5;
+    stand.name = 'cooler_stand';
+    group.add(stand);
+
+    // Drip Tray
+    const trayGeo = new THREE.BoxGeometry(0.42, 0.04, 0.16);
+    const trayMat = new THREE.MeshLambertMaterial({ color: 0x334155 });
+    const tray = new THREE.Mesh(trayGeo, trayMat);
+    tray.position.set(0, 0.78, 0.24);
+    tray.name = 'drip_tray';
+    group.add(tray);
+
+    // Dispensing Taps (Cold - Blue, Hot - Red)
+    const tapGeo = new THREE.BoxGeometry(0.04, 0.08, 0.08);
+    const coldMat = new THREE.MeshLambertMaterial({ color: 0x3b82f6 });
+    const tapCold = new THREE.Mesh(tapGeo, coldMat);
+    tapCold.position.set(-0.1, 0.88, 0.22);
+    tapCold.name = 'tap_cold';
+    group.add(tapCold);
+
+    const hotMat = new THREE.MeshLambertMaterial({ color: 0xef4444 });
+    const tapHot = new THREE.Mesh(tapGeo, hotMat);
+    tapHot.position.set(0.1, 0.88, 0.22);
+    tapHot.name = 'tap_hot';
+    group.add(tapHot);
+
+    // Bottle Collar Ring
+    const collarGeo = new THREE.CylinderGeometry(0.22, 0.25, 0.08, 12);
+    const collarMat = new THREE.MeshLambertMaterial({ color: 0x94a3b8 });
+    const collar = new THREE.Mesh(collarGeo, collarMat);
+    collar.position.y = 1.04;
+    group.add(collar);
+
+    // 20L Inverted Water Bottle (Semi-transparent Blue)
+    const bottleGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.65, 16);
+    const bottleMat = new THREE.MeshLambertMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.6,
+      depthWrite: false
+    });
+    const bottle = new THREE.Mesh(bottleGeo, bottleMat);
+    bottle.position.y = 1.4;
+    bottle.name = 'water_bottle';
+    group.add(bottle);
+
+    // Bottle Top Dome
+    const domeGeo = new THREE.SphereGeometry(0.22, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+    const dome = new THREE.Mesh(domeGeo, bottleMat);
+    dome.position.y = 1.725;
+    group.add(dome);
+
+    return group;
+  }
+
+  createWhiteboardMesh() {
+    const THREE = this.THREE;
+    const group = new THREE.Group();
+    group.name = 'whiteboard';
+
+    // Stand Legs (2 silver vertical posts with feet)
+    const postGeo = new THREE.BoxGeometry(0.06, 1.9, 0.06);
+    const postMat = new THREE.MeshLambertMaterial({ color: 0x94a3b8 });
+    const postL = new THREE.Mesh(postGeo, postMat);
+    postL.position.set(-1.25, 0.95, 0);
+    group.add(postL);
+    const postR = new THREE.Mesh(postGeo, postMat);
+    postR.position.set(1.25, 0.95, 0);
+    group.add(postR);
+
+    // Floor feet
+    const footGeo = new THREE.BoxGeometry(0.06, 0.06, 0.6);
+    const footL = new THREE.Mesh(footGeo, postMat);
+    footL.position.set(-1.25, 0.03, 0);
+    group.add(footL);
+    const footR = new THREE.Mesh(footGeo, postMat);
+    footR.position.set(1.25, 0.03, 0);
+    group.add(footR);
+
+    // Frame (Aluminum)
+    const frameGeo = new THREE.BoxGeometry(2.5, 1.3, 0.05);
+    const frameMat = new THREE.MeshLambertMaterial({ color: 0xcbd5e1 });
+    const frame = new THREE.Mesh(frameGeo, frameMat);
+    frame.position.set(0, 1.25, 0);
+    frame.name = 'whiteboard_frame';
+    group.add(frame);
+
+    // Dry-Erase White Writing Surface
+    const surfGeo = new THREE.BoxGeometry(2.4, 1.2, 0.02);
+    const surfMat = new THREE.MeshLambertMaterial({ color: 0xffffff });
+    const surface = new THREE.Mesh(surfGeo, surfMat);
+    surface.position.set(0, 1.25, 0.025);
+    surface.name = 'whiteboard_surface';
+    group.add(surface);
+
+    // Marker Tray at bottom of board
+    const trayGeo = new THREE.BoxGeometry(2.3, 0.03, 0.12);
+    const trayMat = new THREE.MeshLambertMaterial({ color: 0x64748b });
+    const markerTray = new THREE.Mesh(trayGeo, trayMat);
+    markerTray.position.set(0, 0.65, 0.06);
+    markerTray.name = 'marker_tray';
+    group.add(markerTray);
+
+    // Dry-erase Markers on tray
+    const markerColors = [0x0f172a, 0x2563eb, 0xdc2626];
+    for (let i = 0; i < markerColors.length; i++) {
+      const mGeo = new THREE.BoxGeometry(0.12, 0.025, 0.025);
+      const mMat = new THREE.MeshLambertMaterial({ color: markerColors[i] });
+      const marker = new THREE.Mesh(mGeo, mMat);
+      marker.position.set(-0.3 + i * 0.2, 0.67, 0.06);
+      group.add(marker);
+    }
+
+    // Colorful Post-it sticky notes stuck on the whiteboard
+    const postitData = [
+      { x: -0.8, y: 1.5, color: 0xfef08a, rot: 0.05 },
+      { x: -0.5, y: 1.5, color: 0xfbcfe8, rot: -0.04 },
+      { x: -0.2, y: 1.5, color: 0xbbf7d0, rot: 0.02 },
+      { x: -0.8, y: 1.2, color: 0xfed7aa, rot: -0.06 },
+      { x: -0.5, y: 1.2, color: 0xfef08a, rot: 0.03 },
+      { x: 0.3, y: 1.4, color: 0xbfdbfe, rot: 0.01 }
+    ];
+
+    const noteGeo = new THREE.BoxGeometry(0.2, 0.2, 0.01);
+    for (let i = 0; i < postitData.length; i++) {
+      const p = postitData[i];
+      const noteMat = new THREE.MeshLambertMaterial({ color: p.color });
+      const note = new THREE.Mesh(noteGeo, noteMat);
+      note.position.set(p.x, p.y, 0.04);
+      note.rotation.z = p.rot;
+      note.name = `postit_${i + 1}`;
+      group.add(note);
+    }
+
+    return group;
   }
 
   createDeskMesh() {
