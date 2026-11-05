@@ -15,5 +15,8 @@
     "canvas2d"
   ],
   "author": "Antigravity Pair Programmer",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "three": "^0.187.0"
+  }
 }
