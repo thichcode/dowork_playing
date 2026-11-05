@@ -3,6 +3,7 @@ import { globalTicketSystem } from '../workstation/ticketSystem.js';
 import { globalWindowManager } from '../workstation/windowManager.js';
 import { globalHUD } from '../ui/hud.js';
 import { globalSoundEngine } from '../audio/soundEngine.js';
+import { globalPlotTwistEngine } from './plotTwistEngine.js';
 
 import { CssLayoutFixMinigame } from './frontend/cssLayoutFix.js';
 import { BugHuntUIMinigame } from './frontend/bugHuntUI.js';
@@ -66,6 +67,7 @@ export class MinigameManager {
     this.initialTime = ticket.timeLimit || 90;
     this.timeRemaining = this.initialTime;
     this.isActive = true;
+    this.hasTriggeredTwist = false;
 
     this.activeMinigame = this.createMinigameInstance(ticket.minigameType);
     if (!this.activeMinigame) {
@@ -94,6 +96,16 @@ export class MinigameManager {
     if (!this.isActive) return;
 
     this.timeRemaining -= deltaTime;
+
+    // Mid-task Plot Twist (triggered at 50% time mark)
+    if (!this.hasTriggeredTwist && this.initialTime > 0 && this.timeRemaining <= this.initialTime * 0.5) {
+      this.hasTriggeredTwist = true;
+      const twist = globalPlotTwistEngine.getPlotTwistForRole(this.activeTicket?.role || 'frontend');
+      if (twist) {
+        this.eventBus.emit('plottwist:triggered', twist);
+        this.hud?.showNotification(`⚡ BIẾN CỐ BẤT NGỜ: ${twist.title}`, 5000, 'warning');
+      }
+    }
 
     // Review Focus 4: Minigame timer expiring auto-submits current score
     if (this.timeRemaining <= 0) {
@@ -132,6 +144,9 @@ export class MinigameManager {
     const msg = `${rankEmotes[summary.rank]} — Nhận: +${summary.awardedKpi} KPI, Rep: ${summary.repDelta >= 0 ? '+' : ''}${summary.repDelta}, Stress: +${summary.stressDelta}`;
     this.hud?.showNotification(msg, 4000, summary.rank === 'failed' ? 'danger' : 'success');
     globalSoundEngine.playSFX(summary.rank === 'failed' ? 'fail' : 'success');
+
+    const insight = globalPlotTwistEngine.getTechInsight(this.activeTicket.minigameType);
+    this.eventBus.emit('minigame:completed', { summary, insight, ticket: this.activeTicket });
 
     this.activeTicket = null;
     this.activeMinigame = null;
