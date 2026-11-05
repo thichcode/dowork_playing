@@ -11,6 +11,7 @@ import { globalNPCManager } from './office/npcManager.js';
 import { globalDialogueSystem } from './office/dialogueSystem.js';
 import { globalInteractionZones } from './office/interactionZones.js';
 import { globalDesktopOS } from './workstation/desktopOS.js';
+import { globalMinigameManager } from './minigames/minigameManager.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
