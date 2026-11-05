@@ -26,7 +26,9 @@ export class NPCManager3D {
       const char = new Character3D({
         THREE,
         name: `npc_${npc.id}`,
-        palette: npc.palette || {}
+        palette: npc.palette || {},
+        hasGlasses: !!npc.hasGlasses,
+        hairStyle: npc.hairStyle || 'short'
       });
 
       const pos3d = tileTo3D(npc.tileX, npc.tileY, 1.5);

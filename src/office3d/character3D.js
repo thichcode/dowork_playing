@@ -160,6 +160,32 @@ export class Character3D {
       const rightTress = new THREE.Mesh(tressGeo, hairMat);
       rightTress.position.set(0.24, 0.02, 0.05);
       hairGroup.add(rightTress);
+    } else if (this.hairStyle === 'ponytail') {
+      // Ponytail band and tail at the back
+      const bandGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.05, 8);
+      const bandMat = new THREE.MeshLambertMaterial({ color: 0xec4899 });
+      const band = new THREE.Mesh(bandGeo, bandMat);
+      band.position.set(0, 0.1, -0.24);
+      band.rotation.x = Math.PI / 2;
+      hairGroup.add(band);
+
+      const tailGeo = new THREE.CylinderGeometry(0.05, 0.08, 0.35, 8);
+      const tail = new THREE.Mesh(tailGeo, hairMat);
+      tail.position.set(0, -0.06, -0.26);
+      tail.rotation.x = -0.2;
+      hairGroup.add(tail);
+    } else if (this.hairStyle === 'undercut') {
+      // Pompadour / undercut top volume
+      const pompGeo = new THREE.BoxGeometry(0.44, 0.12, 0.35);
+      const pomp = new THREE.Mesh(pompGeo, hairMat);
+      pomp.position.set(0, 0.32, 0.02);
+      hairGroup.add(pomp);
+    } else if (this.hairStyle === 'sidepart') {
+      // Sidepart sweep
+      const partGeo = new THREE.BoxGeometry(0.3, 0.08, 0.2);
+      const part = new THREE.Mesh(partGeo, hairMat);
+      part.position.set(0.12, 0.28, 0.1);
+      hairGroup.add(part);
     }
     this.head.add(hairGroup);
 

@@ -6,6 +6,8 @@ export const NPCS_DATA = [
     room: 'pantry',
     tileX: 23,
     tileY: 3,
+    hairStyle: 'bob',
+    hasGlasses: false,
     palette: {
       hair: '#7c2d12', // brown
       shirt: '#ec4899', // pink
@@ -21,6 +23,8 @@ export const NPCS_DATA = [
     room: 'meeting',
     tileX: 8,
     tileY: 14,
+    hairStyle: 'sidepart',
+    hasGlasses: true,
     palette: {
       hair: '#1e293b', // black
       shirt: '#0284c7', // blue
@@ -36,6 +40,8 @@ export const NPCS_DATA = [
     room: 'it_room',
     tileX: 24,
     tileY: 13,
+    hairStyle: 'sidepart',
+    hasGlasses: true,
     palette: {
       hair: '#475569',
       shirt: '#10b981', // green
@@ -51,6 +57,8 @@ export const NPCS_DATA = [
     room: 'pantry',
     tileX: 27,
     tileY: 4,
+    hairStyle: 'ponytail',
+    hasGlasses: false,
     palette: {
       hair: '#d97706', // orange
       shirt: '#8b5cf6', // purple
@@ -66,6 +74,8 @@ export const NPCS_DATA = [
     room: 'server',
     tileX: 5,
     tileY: 4,
+    hairStyle: 'buzz',
+    hasGlasses: false,
     palette: {
       hair: '#0f172a',
       shirt: '#ef4444', // red
@@ -81,6 +91,8 @@ export const NPCS_DATA = [
     room: 'it_room',
     tileX: 24,
     tileY: 16,
+    hairStyle: 'undercut',
+    hasGlasses: true,
     palette: {
       hair: '#334155',
       shirt: '#f59e0b', // amber
