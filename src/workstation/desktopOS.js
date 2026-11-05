@@ -2,6 +2,10 @@ import { globalWindowManager } from './windowManager.js';
 import { globalEventBus } from '../core/eventBus.js';
 import { globalSlackChatApp } from './apps/slackChat.js';
 import { globalJiraBoardApp } from './apps/jiraBoard.js';
+import { globalTerminalApp } from './apps/terminal.js';
+import { globalCodeEditorApp } from './apps/codeEditor.js';
+import { globalBrowserApp } from './apps/browser.js';
+import { globalFileManagerApp } from './apps/fileManager.js';
 
 export class DesktopOS {
   constructor(options = {}) {
@@ -30,20 +34,28 @@ export class DesktopOS {
 
     // Handle app open requests
     this.eventBus.on('app:request-open', ({ appId }) => {
-      if (appId === 'slack') globalSlackChatApp.open();
-      if (appId === 'jira') globalJiraBoardApp.open();
+      this.openApp(appId);
     });
 
     this.isInitialized = true;
   }
 
   openApp(appId) {
-    if (appId === 'slack') {
-      globalSlackChatApp.open();
-    } else if (appId === 'jira') {
-      globalJiraBoardApp.open();
-    } else {
-      this.eventBus.emit('app:request-open', { appId });
+    switch (appId) {
+      case 'slack':
+        return globalSlackChatApp.open();
+      case 'jira':
+        return globalJiraBoardApp.open();
+      case 'terminal':
+        return globalTerminalApp.open();
+      case 'codeEditor':
+        return globalCodeEditorApp.open();
+      case 'browser':
+        return globalBrowserApp.open();
+      case 'fileManager':
+        return globalFileManagerApp.open();
+      default:
+        console.warn(`Unknown app: ${appId}`);
     }
   }
 
