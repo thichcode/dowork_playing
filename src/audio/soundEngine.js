@@ -109,6 +109,24 @@ export class SoundEngine {
         setTimeout(() => this.playTone(660, 0.15, 'square', 0.2), 150);
         break;
 
+      case 'phoneRing':
+        // Dual tone phone ring
+        this.playTone(440, 0.1, 'sine', 0.18);
+        setTimeout(() => this.playTone(480, 0.1, 'sine', 0.18), 80);
+        setTimeout(() => this.playTone(440, 0.15, 'sine', 0.18), 160);
+        break;
+
+      case 'duckSqueak':
+        // Rising squeak
+        this.playTone(700, 0.08, 'sine', 0.15);
+        setTimeout(() => this.playTone(1100, 0.15, 'sine', 0.18), 60);
+        break;
+
+      case 'keyClick':
+        // Mechanical switch click
+        this.playTone(1400 + Math.random() * 300, 0.02, 'triangle', 0.08);
+        break;
+
       default:
         this.playTone(440, 0.08, 'square', 0.05);
         break;

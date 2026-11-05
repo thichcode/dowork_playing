@@ -18,6 +18,12 @@ import { globalMenuScreen } from './ui/menuScreen.js';
 import { globalResultScreen } from './ui/resultScreen.js';
 import { globalSettingsLLMModal } from './ui/settingsLLM.js';
 import { globalLLMProvider } from './core/llmProvider.js';
+import { globalDeskView } from './office/deskView.js';
+import { globalGuideSystem } from './ui/guideSystem.js';
+import { globalGuideModal } from './ui/guideModal.js';
+import { globalLocationManager } from './office/locationManager.js';
+import { globalNPCDeskManager } from './office/npcDeskManager.js';
+import { globalSoundEngine } from './audio/soundEngine.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
@@ -66,19 +72,43 @@ function showEndOfDayModal() {
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
-  // 1. Initialize view elements
-  const officeEl = document.getElementById('office-container');
+  // 1. Initialize First-Person Desk View & Guide System
+  globalDeskView.render();
+  globalGuideSystem.renderGuideBar();
+
+  // Mount workstation-os inside monitor-screen-mount
+  const monitorMount = document.getElementById('monitor-screen-mount');
   const workstationEl = document.getElementById('workstation-os');
-  globalViewManager.init(officeEl, workstationEl);
+  if (monitorMount && workstationEl) {
+    monitorMount.appendChild(workstationEl);
+    workstationEl.classList.remove('hidden');
+  }
 
   // 2. Wire workstation exit button & OS init
   globalDesktopOS.init();
   const btnLeave = document.getElementById('btn-leave-workstation');
   if (btnLeave) {
     btnLeave.addEventListener('click', () => {
-      globalViewManager.switch('office');
+      globalDeskView.zoomOut();
     });
   }
+
+  // Wire hover tooltips on desk items
+  const bindTooltip = (elementId, itemId) => {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.addEventListener('mouseenter', (e) => globalGuideSystem.showTooltip(itemId, e.clientX, e.clientY));
+    el.addEventListener('mouseleave', () => globalGuideSystem.hideTooltip());
+  };
+  bindTooltip('desk-coffee-cup', 'coffee');
+  bindTooltip('desk-phone', 'phone');
+  bindTooltip('desk-duck', 'duck');
+  bindTooltip('desk-sticky-note', 'notes');
+  bindTooltip('btn-zoom-toggle', 'monitor');
+
+  // Wire Guide modal buttons
+  document.getElementById('btn-open-guide-hud')?.addEventListener('click', () => globalGuideModal.show());
+  document.getElementById('btn-open-guide-modal')?.addEventListener('click', () => globalGuideModal.show());
 
   // 3. Load map data
   try {
@@ -173,17 +203,78 @@ window.addEventListener('DOMContentLoaded', async () => {
   // 7. Start Game Loop
   globalGameLoop.start();
 
-  // Escape key handler for accessible modal dismissal
+  // Global Keyboard Shortcuts handler (Space, 1, 2, 3, P, M, ?, Esc)
   window.addEventListener('keydown', (e) => {
+    const tag = document.activeElement?.tagName?.toLowerCase();
+    const isTyping = tag === 'input' || tag === 'textarea';
+
     if (e.key === 'Escape') {
       const modal = document.getElementById('modal-container');
       if (modal && !modal.classList.contains('hidden')) {
         modal.classList.add('hidden');
       }
+      if (globalGuideModal.isOpen()) {
+        globalGuideModal.close();
+      }
+      if (globalLocationManager.getLocation() !== 'desk') {
+        globalLocationManager.switchLocation('desk');
+      }
+      if (globalDeskView.isZoomed) {
+        globalDeskView.zoomOut();
+      }
       if (globalDialogueSystem.isActive()) {
         globalDialogueSystem.close();
       }
+      return;
     }
+
+    if (isTyping) return;
+
+    if (e.key === ' ' || e.code === 'Space') {
+      e.preventDefault();
+      globalDeskView.toggleZoom();
+      globalSoundEngine.playSFX('keyClick');
+    } else if (e.key === '1') {
+      if (globalDeskView.drinkCoffee()) {
+        globalSoundEngine.playSFX('coffee');
+      }
+    } else if (e.key === '2') {
+      if (globalDeskView.isPhoneRinging) {
+        globalDeskView.answerPhone();
+      } else {
+        globalHUD.showNotification('☎️ Điện thoại im ắng. Khi có sự cố, chuông sẽ reo!', 2500, 'info');
+      }
+    } else if (e.key === '3') {
+      globalDeskView.squeakDuck();
+      globalSoundEngine.playSFX('duckSqueak');
+    } else if (e.key.toLowerCase() === 'p') {
+      globalLocationManager.switchLocation(globalLocationManager.getLocation() === 'pantry' ? 'desk' : 'pantry');
+    } else if (e.key.toLowerCase() === 'm') {
+      globalLocationManager.switchLocation(globalLocationManager.getLocation() === 'meeting' ? 'desk' : 'meeting');
+    } else if (e.key === '?') {
+      globalGuideModal.show();
+    }
+  });
+
+  // Day 1 Onboarding Guided Walkthrough
+  globalEventBus.on('game:role-selected', () => {
+    setTimeout(() => {
+      globalNPCDeskManager.spawnNPC(
+        'tuan_anh',
+        'happy',
+        '🎉 Chào mừng em gia nhập MegaSoft Corp! Hãy nhấn [1] uống cốc cà phê khởi động, sau đó nhấn [Space] để phóng to màn hình vào CyberWork OS nhận task đầu tiên nhé!'
+      );
+    }, 600);
+  });
+
+  // Plot Twist phone notification
+  globalEventBus.on('plottwist:triggered', (twist) => {
+    globalDeskView.triggerPhoneRing(twist.title);
+    globalSoundEngine.playSFX('phoneRing');
+  });
+
+  globalEventBus.on('desk:call-answered', ({ reason }) => {
+    globalNPCDeskManager.spawnNPC('pm_hung', 'panic', `🔥 ALO EM ƠI! ${reason}. Hãy kiểm tra lại ticket ngay nhé!`);
   });
 
   // Fade out & dismiss preloader

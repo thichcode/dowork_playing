@@ -23,6 +23,9 @@ test('SoundEngine playSFX and playBGM handle calls safely without audio hardware
   assert.doesNotThrow(() => {
     engine.playSFX('slackDing');
     engine.playSFX('coffee');
+    engine.playSFX('phoneRing');
+    engine.playSFX('duckSqueak');
+    engine.playSFX('keyClick');
     engine.playBGM('office');
     engine.stopBGM();
   });

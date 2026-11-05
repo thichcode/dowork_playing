@@ -81,11 +81,14 @@
     </div>
 
     <!-- Time & Chapter & Quick Actions -->
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center space-x-3">
       <div class="text-right">
         <div class="text-amber-300 font-mono font-bold text-sm tracking-wider" id="hud-clock">09:00</div>
         <div class="text-[10px] text-slate-400 font-mono" id="hud-day-chapter">Ngày 1 • Chap 1</div>
       </div>
+      <button id="btn-open-guide-hud" class="p-1.5 hover:bg-slate-800 rounded text-amber-300 hover:text-white transition font-bold text-xs" title="Cẩm Nang Hướng Dẫn [?]">
+        ❓
+      </button>
       <button id="btn-open-settings" class="p-1.5 hover:bg-slate-800 rounded text-slate-300 hover:text-white transition" title="Cài đặt">
         ⚙️
       </button>
@@ -96,19 +99,17 @@
   <div id="toast-container" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center space-y-2 pointer-events-none"></div>
 
   <!-- Main Viewports Container -->
-  <main class="relative flex-1 w-full h-full pt-12 overflow-hidden">
-    <!-- View 1: 2D Canvas Office View -->
-    <div id="office-container" class="w-full h-full relative flex items-center justify-center bg-slate-950">
+  <main class="relative flex-1 w-full h-full pt-12 overflow-hidden flex flex-col">
+    <!-- View 1: First-Person Desk View (Primary Workplace) -->
+    <div id="desk-view" class="w-full h-full relative flex flex-col overflow-hidden"></div>
+
+    <!-- Legacy Canvas Container (Preserved for compatibility) -->
+    <div id="office-container" class="hidden w-full h-full relative items-center justify-center bg-slate-950">
       <canvas id="game-canvas" width="800" height="600" class="max-w-full max-h-full rounded-md shadow-2xl border border-slate-800"></canvas>
-      
-      <!-- Interaction Prompt Tooltip -->
-      <div id="interaction-prompt" class="hidden absolute bottom-6 bg-slate-900/90 border border-indigo-500/80 text-indigo-300 px-4 py-2 rounded-full font-mono text-xs shadow-lg backdrop-blur animate-pulse">
-        Nhấn <span class="bg-indigo-600 text-white font-bold px-1.5 py-0.5 rounded shadow">E</span> để tương tác
-      </div>
     </div>
 
     <!-- View 2: Workstation OS Simulator View -->
-    <div id="workstation-os" class="hidden w-full h-full relative bg-slate-900 flex flex-col select-none overflow-hidden">
+    <div id="workstation-os" class="w-full h-full relative bg-slate-900 flex flex-col select-none overflow-hidden">
       <!-- Desktop Area for Draggable Windows -->
       <div id="os-desktop" class="relative flex-1 w-full h-full overflow-hidden p-4 bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900">
         <!-- Desktop Shortcuts / Icons -->
@@ -145,7 +146,7 @@
         <div class="flex items-center space-x-2">
           <button id="btn-leave-workstation" class="flex items-center space-x-1.5 px-3 py-1 bg-rose-600/90 hover:bg-rose-500 text-white rounded text-xs font-semibold shadow transition">
             <span>🔙</span>
-            <span>Rời Bàn Làm Việc</span>
+            <span>Thu Nhỏ [Space]</span>
           </button>
           <div class="h-4 w-px bg-slate-700 mx-1"></div>
           <!-- Open apps tray -->
@@ -158,6 +159,15 @@
       </div>
     </div>
   </main>
+
+  <!-- Bottom Quick Controls Guide Bar -->
+  <footer id="guide-bar" class="w-full z-30 shrink-0"></footer>
+
+  <!-- Hover Item Tooltip Floating Container -->
+  <div id="item-tooltip" class="hidden fixed z-50 bg-slate-900/95 border border-indigo-500 rounded-xl p-3 shadow-2xl pointer-events-none max-w-xs transition-all duration-150 backdrop-blur"></div>
+
+  <!-- Location Overlay (Pantry / Meeting Room) -->
+  <div id="location-overlay" class="hidden fixed inset-0 z-40 bg-black/75 backdrop-blur-md flex items-center justify-center p-6"></div>
 
   <!-- Modals and Overlays Container -->
   <div id="dialogue-overlay" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end justify-center p-6"></div>
