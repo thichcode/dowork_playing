@@ -2,6 +2,7 @@ import { globalEventBus } from '../../core/eventBus.js';
 import { globalGameState } from '../../core/gameState.js';
 import { globalWindowManager } from '../windowManager.js';
 import { CHOICE_EFFECT_TEMPLATES } from '../../office/dialogueSystem.js';
+import { globalSoundEngine } from '../../audio/soundEngine.js';
 
 export class SlackChatApp {
   constructor(options = {}) {
@@ -167,6 +168,7 @@ export class SlackChatApp {
     if (!this.messages[channel]) this.messages[channel] = [];
     const time = `${String(this.gameState.get('time.hour') || 9).padStart(2, '0')}:${String(this.gameState.get('time.minute') || 0).padStart(2, '0')}`;
     this.messages[channel].push({ sender, text, time, choices });
+    globalSoundEngine.playSFX('slackDing');
 
     this.eventBus.emit('slack:new-message', { channel, sender, text });
   }

@@ -3,6 +3,7 @@ import { globalGameState } from '../core/gameState.js';
 import { globalTimeSystem } from './timeSystem.js';
 import { globalViewManager } from '../core/viewManager.js';
 import { globalHUD } from '../ui/hud.js';
+import { globalSoundEngine } from '../audio/soundEngine.js';
 
 export class InteractionZones {
   constructor(options = {}) {
@@ -68,6 +69,7 @@ export class InteractionZones {
         this.gameState.set('player.stress', stress);
         this.gameState.set('coffeeCount', count + 1);
         this.timeSystem.advanceMinutes(15);
+        globalSoundEngine.playSFX('coffee');
 
         this.hud?.showNotification(`☕ Nhâm nhi cà phê (+30 Energy, -10 Stress). Ly thứ ${count + 1}/3 trong ngày.`, 3000, 'success');
         return { success: true, action: 'drank_coffee' };

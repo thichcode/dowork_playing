@@ -2,6 +2,7 @@ import { globalEventBus } from '../core/eventBus.js';
 import { globalTicketSystem } from '../workstation/ticketSystem.js';
 import { globalWindowManager } from '../workstation/windowManager.js';
 import { globalHUD } from '../ui/hud.js';
+import { globalSoundEngine } from '../audio/soundEngine.js';
 
 import { CssLayoutFixMinigame } from './frontend/cssLayoutFix.js';
 import { BugHuntUIMinigame } from './frontend/bugHuntUI.js';
@@ -130,6 +131,7 @@ export class MinigameManager {
 
     const msg = `${rankEmotes[summary.rank]} — Nhận: +${summary.awardedKpi} KPI, Rep: ${summary.repDelta >= 0 ? '+' : ''}${summary.repDelta}, Stress: +${summary.stressDelta}`;
     this.hud?.showNotification(msg, 4000, summary.rank === 'failed' ? 'danger' : 'success');
+    globalSoundEngine.playSFX(summary.rank === 'failed' ? 'fail' : 'success');
 
     this.activeTicket = null;
     this.activeMinigame = null;
