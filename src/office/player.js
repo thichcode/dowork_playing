@@ -6,7 +6,14 @@ export class Player {
     this.x = options.startX ?? 3 * 32;
     this.y = options.startY ?? 7 * 32;
     this.tileSize = options.tileSize || 32;
-    this.speed = options.speed || 96; // pixels per second (~3 tiles/s)
+    this.baseSpeed = options.speed || 96; // pixels per second (~3 tiles/s)
+    this.sprintSpeed = options.sprintSpeed || 165; // ~5.2 tiles/s (1.7x boost)
+    this.speed = this.baseSpeed;
+    this.isSprinting = false;
+    this.vx = 0;
+    this.vy = 0;
+    this.acceleration = 1800; // px/s^2 for responsive, smooth acceleration
+    this.friction = 900; // px/s^2 for smooth deceleration glide
     this.direction = 0; // 0=down, 1=up, 2=right, 3=left
     this.animFrame = 0;
     this.animTimer = 0;
@@ -20,6 +27,10 @@ export class Player {
     };
   }
 
+  get currentVelocity() {
+    return Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+  }
+
   get tileX() {
     return Math.floor((this.x + 16) / this.tileSize);
   }
@@ -29,56 +40,93 @@ export class Player {
   }
 
   update(deltaTime, collisionMap = []) {
-    let dx = 0;
-    let dy = 0;
+    let inputDx = 0;
+    let inputDy = 0;
 
     if (this.inputManager.isKeyDown('w') || this.inputManager.isKeyDown('arrowup')) {
-      dy -= 1;
+      inputDy -= 1;
       this.direction = 1;
     }
     if (this.inputManager.isKeyDown('s') || this.inputManager.isKeyDown('arrowdown')) {
-      dy += 1;
+      inputDy += 1;
       this.direction = 0;
     }
     if (this.inputManager.isKeyDown('a') || this.inputManager.isKeyDown('arrowleft')) {
-      dx -= 1;
+      inputDx -= 1;
       this.direction = 3;
     }
     if (this.inputManager.isKeyDown('d') || this.inputManager.isKeyDown('arrowright')) {
-      dx += 1;
+      inputDx += 1;
       this.direction = 2;
     }
 
-    this.isMoving = dx !== 0 || dy !== 0;
+    const hasInput = inputDx !== 0 || inputDy !== 0;
+
+    // Check sprint modifier
+    this.isSprinting = hasInput && (this.inputManager.isKeyDown('shift') || this.inputManager.isKeyDown('Shift'));
+    const targetMaxSpeed = this.isSprinting ? this.sprintSpeed : this.baseSpeed;
+    this.speed = targetMaxSpeed;
+
+    // Normalize diagonal input vector
+    if (inputDx !== 0 && inputDy !== 0) {
+      inputDx *= 0.7071;
+      inputDy *= 0.7071;
+    }
+
+    const targetVx = inputDx * targetMaxSpeed;
+    const targetVy = inputDy * targetMaxSpeed;
+
+    // Smooth momentum-based acceleration & friction deceleration
+    const rate = hasInput ? this.acceleration : this.friction;
+    const maxChange = rate * deltaTime;
+
+    const diffX = targetVx - this.vx;
+    if (Math.abs(diffX) <= maxChange) {
+      this.vx = targetVx;
+    } else {
+      this.vx += Math.sign(diffX) * maxChange;
+    }
+
+    const diffY = targetVy - this.vy;
+    if (Math.abs(diffY) <= maxChange) {
+      this.vy = targetVy;
+    } else {
+      this.vy += Math.sign(diffY) * maxChange;
+    }
+
+    this.isMoving = Math.abs(this.vx) > 3 || Math.abs(this.vy) > 3;
 
     if (this.isMoving) {
-      // Normalize vector for diagonals
-      if (dx !== 0 && dy !== 0) {
-        dx *= 0.7071;
-        dy *= 0.7071;
-      }
-
-      const moveDist = this.speed * deltaTime;
-      const targetX = this.x + dx * moveDist;
-      const targetY = this.y + dy * moveDist;
+      const moveX = this.vx * deltaTime;
+      const moveY = this.vy * deltaTime;
+      const targetX = this.x + moveX;
+      const targetY = this.y + moveY;
 
       // Check collision on X axis
       if (!this.checkCollision(targetX, this.y, collisionMap)) {
         this.x = targetX;
+      } else {
+        this.vx = 0;
       }
+
       // Check collision on Y axis
       if (!this.checkCollision(this.x, targetY, collisionMap)) {
         this.y = targetY;
+      } else {
+        this.vy = 0;
       }
 
-      // Cycle animation
+      // Cycle animation (faster cycle when sprinting)
+      const animInterval = this.isSprinting ? 0.09 : 0.15;
       this.animTimer += deltaTime;
-      if (this.animTimer >= 0.15) {
+      if (this.animTimer >= animInterval) {
         this.animTimer = 0;
         this.animFrame = (this.animFrame + 1) % 3;
       }
     } else {
       this.animFrame = 0;
+      this.vx = 0;
+      this.vy = 0;
     }
   }
 

@@ -279,10 +279,11 @@ export class Character3D {
     legMesh.add(shoeGroup);
   }
 
-  updateAnimation(deltaTime, isMoving) {
+  updateAnimation(deltaTime, isMoving, isSprinting = false, turnAngle = 0) {
     if (isMoving) {
-      this.walkTimer += deltaTime * 12;
-      const swing = Math.sin(this.walkTimer) * 0.65;
+      const freq = isSprinting ? 22 : 12;
+      this.walkTimer += deltaTime * freq;
+      const swing = Math.sin(this.walkTimer) * (isSprinting ? 0.85 : 0.65);
 
       this.leftLeg.rotation.x = swing;
       this.rightLeg.rotation.x = -swing;
@@ -290,8 +291,21 @@ export class Character3D {
       this.leftArm.rotation.x = -swing * 0.8;
       this.rightArm.rotation.x = swing * 0.8;
 
-      // Vertical bobbing
-      this.mesh.position.y = Math.abs(Math.sin(this.walkTimer)) * 0.08;
+      // Vertical bobbing (more pronounced during sprint)
+      const bobHeight = isSprinting ? 0.12 : 0.08;
+      this.mesh.position.y = Math.abs(Math.sin(this.walkTimer)) * bobHeight;
+
+      // Body banking / roll when turning
+      if (Math.abs(turnAngle) > 0.05) {
+        const targetRoll = Math.max(-0.15, Math.min(0.15, -turnAngle * 0.25));
+        this.torso.rotation.z += (targetRoll - this.torso.rotation.z) * Math.min(1, deltaTime * 12);
+        if (this.head) {
+          this.head.rotation.z = this.torso.rotation.z * 0.5;
+        }
+      } else {
+        this.torso.rotation.z *= Math.max(0, 1 - deltaTime * 8);
+        if (this.head) this.head.rotation.z *= Math.max(0, 1 - deltaTime * 8);
+      }
     } else {
       // Smooth reset to idle
       const decay = Math.max(0, 1 - deltaTime * 8);
@@ -300,6 +314,8 @@ export class Character3D {
       this.leftArm.rotation.x *= decay;
       this.rightArm.rotation.x *= decay;
       this.mesh.position.y *= decay;
+      this.torso.rotation.z *= decay;
+      if (this.head) this.head.rotation.z *= decay;
     }
   }
 
