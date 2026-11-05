@@ -3,7 +3,8 @@ export const NPCS_DATA = [
     id: 'hr_lan',
     name: 'HR Lan',
     role: 'Nhân Sự & Onboarding',
-    tileX: 3,
+    room: 'pantry',
+    tileX: 23,
     tileY: 3,
     palette: {
       hair: '#7c2d12', // brown
@@ -17,8 +18,9 @@ export const NPCS_DATA = [
     id: 'pm_hung',
     name: 'PM Hùng',
     role: 'Project Manager (Scrum Master)',
-    tileX: 9,
-    tileY: 3,
+    room: 'meeting',
+    tileX: 8,
+    tileY: 14,
     palette: {
       hair: '#1e293b', // black
       shirt: '#0284c7', // blue
@@ -31,8 +33,9 @@ export const NPCS_DATA = [
     id: 'dev_minh',
     name: 'Senior Dev Minh',
     role: 'Mentor & Tech Reviewer',
-    tileX: 3,
-    tileY: 8,
+    room: 'it_room',
+    tileX: 24,
+    tileY: 13,
     palette: {
       hair: '#475569',
       shirt: '#10b981', // green
@@ -45,8 +48,9 @@ export const NPCS_DATA = [
     id: 'qa_trang',
     name: 'QA Lead Trang',
     role: 'Lead QA / QC',
-    tileX: 9,
-    tileY: 8,
+    room: 'pantry',
+    tileX: 27,
+    tileY: 4,
     palette: {
       hair: '#d97706', // orange
       shirt: '#8b5cf6', // purple
@@ -59,7 +63,8 @@ export const NPCS_DATA = [
     id: 'devops_khoa',
     name: 'DevOps Khoa',
     role: 'DevOps / SRE Lead',
-    tileX: 19,
+    room: 'server',
+    tileX: 5,
     tileY: 4,
     palette: {
       hair: '#0f172a',
@@ -73,8 +78,9 @@ export const NPCS_DATA = [
     id: 'lead_duc',
     name: 'Tech Lead Đức',
     role: 'Tech Lead / Trưởng Phòng IT',
-    tileX: 3,
-    tileY: 13,
+    room: 'it_room',
+    tileX: 24,
+    tileY: 16,
     palette: {
       hair: '#334155',
       shirt: '#f59e0b', // amber

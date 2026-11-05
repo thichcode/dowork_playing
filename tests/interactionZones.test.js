@@ -56,3 +56,34 @@ test('Desk interaction switches view to workstation', () => {
   iz.interactWithZone({ id: 'desk', type: 'desk' });
   assert.equal(viewManager.currentView, 'workstation');
 });
+
+test('Fridge interaction adds energy and advances 10 minutes', () => {
+  const bus = new EventBus();
+  const state = new GameState({ eventBus: bus, storageKey: 'test_iz_fridge' });
+  const timeSystem = new TimeSystem({ eventBus: bus, gameState: state });
+  const iz = new InteractionZones({ eventBus: bus, gameState: state, timeSystem });
+
+  state.set('player.energy', 50);
+  const res = iz.interactWithZone({ id: 'fridge', type: 'fridge' });
+  assert.equal(res.success, true);
+  assert.equal(res.action, 'used_fridge');
+  assert.equal(state.get('player.energy'), 65);
+});
+
+test('Meeting and server rack emit appropriate events', () => {
+  const bus = new EventBus();
+  const iz = new InteractionZones({ eventBus: bus });
+
+  let scrumEmitted = false;
+  let serverEmitted = false;
+  bus.on('ui:show-scrum-board', () => { scrumEmitted = true; });
+  bus.on('ui:show-server-rack', () => { serverEmitted = true; });
+
+  const resMeeting = iz.interactWithZone({ id: 'meeting_table', type: 'meeting' });
+  assert.equal(resMeeting.success, true);
+  assert.equal(scrumEmitted, true);
+
+  const resServer = iz.interactWithZone({ id: 'server_rack', type: 'server_rack' });
+  assert.equal(resServer.success, true);
+  assert.equal(serverEmitted, true);
+});

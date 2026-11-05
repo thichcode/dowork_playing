@@ -92,6 +92,21 @@ export class InteractionZones {
         return { success: true, action: 'viewed_scrum' };
       }
 
+      case 'meeting': {
+        this.eventBus.emit('ui:show-scrum-board');
+        this.hud?.showNotification('📊 Bàn họp Alpha: Thảo luận kế hoạch Sprint & Standup!', 2500, 'info');
+        return { success: true, action: 'attended_meeting' };
+      }
+
+      case 'fridge': {
+        const energy = Math.min(100, (this.gameState.get('player.energy') || 0) + 15);
+        this.gameState.set('player.energy', energy);
+        this.timeSystem.advanceMinutes(10);
+        globalSoundEngine.playSFX('coffee');
+        this.hud?.showNotification('🧃 Nước hoa quả mát lạnh trong tủ lạnh Pantry (+15 Energy).', 2500, 'success');
+        return { success: true, action: 'used_fridge' };
+      }
+
       case 'server_rack': {
         this.eventBus.emit('ui:show-server-rack');
         this.hud?.showNotification('🔧 Kiểm tra hệ thống Server Rack: Đèn LED đang nhấp nháy bình thường.', 2500, 'info');
