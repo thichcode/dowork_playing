@@ -12,6 +12,8 @@ import { globalDialogueSystem } from './office/dialogueSystem.js';
 import { globalInteractionZones } from './office/interactionZones.js';
 import { globalDesktopOS } from './workstation/desktopOS.js';
 import { globalMinigameManager } from './minigames/minigameManager.js';
+import { globalChapterManager } from './story/chapterManager.js';
+import { globalRandomEventsManager } from './story/randomEvents.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
