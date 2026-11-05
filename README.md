@@ -9,13 +9,17 @@
 Bạn vừa trúng tuyển vào **MegaSoft Corp** — tập đoàn phần mềm hàng đầu với quy mô hàng nghìn nhân sự. Trước mắt bạn là kỳ **thử việc 60 ngày** đầy thách thức, nơi bạn phải chứng minh năng lực chuyên môn, khả năng chịu áp lực, xử lý sự cố và nghệ thuật sinh tồn nơi công sở IT.
 
 Trò chơi kết hợp 2 trải nghiệm độc đáo:
-1. **Không gian 3D Isometric Low-Poly (Three.js WebGL)**:
-   - Dựng toàn bộ 4 phòng ban với kiến trúc tường cắt vát thấp (*The Sims* style) không che khuất góc nhìn:
-     - 💻 **Phòng Kỹ Thuật IT**: Bàn làm việc của bạn cùng Senior Dev Minh và Tech Lead Đức.
-     - ☕ **Quầy Pantry & Lounge**: Quầy bar gỗ sồi, máy pha cà phê Espresso, tủ lạnh 2 cánh, ghế sofa nệm da êm ái cùng HR Lan và QA Trang.
-     - 📊 **Phòng Họp Alpha**: Bàn họp oval kính dài, hàng ghế xoay, bảng Kanban Scrum cùng PM Hùng.
+1. **Không gian 3D Isometric High-Detail Stylized (Three.js WebGL)**:
+   - Dựng toàn bộ 4 phòng ban với kiến trúc tường cắt vát thấp (*The Sims* style) không che khuất góc nhìn, vách kính trong suốt viền nhôm ngăn phòng hiện đại:
+     - 💻 **Phòng Kỹ Thuật IT**: Các cụm bàn làm việc cao cấp với laptop mở gập phát sáng ma trận code, ghế công thái học đệm lưới 5 bánh xoay, chuột quang kèm lót chuột, chậu sen đá để bàn, Senior Dev Minh và Tech Lead Đức.
+     - ☕ **Quầy Pantry & Lounge**: Cây nước nóng lạnh với bình 20L xanh trong suốt kèm 2 cần gạt đỏ/xanh, quầy bar gỗ sồi, máy pha cà phê Espresso, tủ lạnh 2 cánh, ghế sofa nệm da êm ái cùng HR Lan và QA Trang.
+     - 📊 **Phòng Họp Alpha**: Bảng trắng viết bút dạ cỡ lớn dán ngập tràn các tờ giấy ghi chú Post-it đa sắc màu, bàn họp oval kính dài, hàng ghế xoay cùng PM Hùng.
      - 🖥️ **Phòng Server Datacenter**: Hệ thống tủ rack máy chủ với dải đèn LED phát sáng nhấp nháy (Emissive pulse) và DevOps SRE Khoa canh giữ 24/7.
-   - **Avatar 3D & Animation**: Nhân vật 3D Low-Poly cử động tay chân nhịp nhàng khi bước đi, đổi trang phục theo Role đã chọn.
+     - 🌿 **Cảnh quan văn phòng xanh & Tranh cổ động**: Các chậu cây nhiệt đới Monstera và Ficus chậu sứ trắng đặt tại các góc hành lang và lối vào phòng; tranh khẩu hiệu công nghệ đóng khung viền kim loại trên tường hành lang (*"Keep Calm & Git Push"*, *"Zero Downtime Rollout"*).
+   - **Avatar & NPC 3D High-Detail Stylized**:
+     - Cấu trúc giải phẫu người sống động với cổ, đầu, mắt, lông mày, mũi, tai, bàn tay và giày thể thao 2 tông màu đế trắng.
+     - Đa dạng kiểu tóc và phụ kiện cá tính: Tóc mái uốn, tóc Bob, tóc đuôi ngựa cột nơ (QA Trang), tóc Undercut vuốt sáp (Tech Lead), tóc rẽ ngôi lịch thiệp (Dev Minh, PM Hùng).
+     - Thẻ nhân viên IT ID Badge đeo dây Lanyard rủ từ cổ áo, kính cận gọng tri thức cho dàn kỹ sư và Tech Lead.
    - **Xoay Camera 360° & Zoom**: Kéo chuột để xoay quanh văn phòng, lăn chuột để phóng to/thu nhỏ.
    - **Chuyển đổi 3D / 2D tức thì**: Nút `[🎮 3D / 2D]` trên thanh HUD cho phép chuyển đổi qua lại giữa đồ họa 3D hiện đại và phong cách Pixel Retro 2D bất kỳ lúc nào.
 2. **Góc nhìn thứ nhất (First-Person Desk Simulator)**: Khi đi tới bàn làm việc và nhấn `[E]`, camera lướt vào bàn làm việc với chiếc máy tính chạy **CyberWork OS** (nhấn `[Space]` để zoom in/out), nhấp cà phê `[1]`, nhấc máy khi điện thoại bàn reo `[2]`, bóp vịt cao su `[3]`, và có thể nhấn "Đứng dậy [Esc]" để lùi về góc nhìn 3D Isometric dạo chơi tiếp.
@@ -91,7 +95,7 @@ Trò chơi kết hợp 2 trải nghiệm độc đáo:
 # 1. Di chuyển vào thư mục dự án
 cd game_thuviec
 
-# 2. Chạy bộ kiểm thử tự động (69 unit tests)
+# 2. Chạy bộ kiểm thử tự động (81 unit tests)
 npm test
 
 # 3. Khởi động máy chủ phát triển cục bộ
