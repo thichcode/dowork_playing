@@ -1,6 +1,6 @@
-# 🏢 MegaSoft Corp: 60 Ngày Thử Việc (First-Person IT Probation RPG)
+# 🏢 MegaSoft Corp: 60 Ngày Thử Việc (Third-Person Walking Office RPG & Desk Simulator)
 
-> **Webgame mô phỏng bàn làm việc góc nhìn thứ nhất (First-Person Desk Simulator) & sinh tồn nghề nghiệp IT chân thực, hài hước** dành cho kỹ sư phần mềm, lập trình viên, tester và DevOps trong một công ty công nghệ lớn.
+> **Webgame kết hợp nhập vai đi bộ khám phá văn phòng góc nhìn thứ ba (Third-Person Walking RPG) & mô phỏng bàn làm việc góc nhìn thứ nhất (First-Person Desk Simulator)** dành cho kỹ sư phần mềm, lập trình viên, tester và DevOps trong một tập đoàn công nghệ lớn.
 
 ---
 
@@ -8,11 +8,13 @@
 
 Bạn vừa trúng tuyển vào **MegaSoft Corp** — tập đoàn phần mềm hàng đầu với quy mô hàng nghìn nhân sự. Trước mắt bạn là kỳ **thử việc 60 ngày** đầy thách thức, nơi bạn phải chứng minh năng lực chuyên môn, khả năng chịu áp lực, xử lý sự cố và nghệ thuật sinh tồn nơi công sở IT.
 
-Trò chơi đặt bạn vào **Góc nhìn thứ nhất (First-Person)** ngay tại chiếc bàn làm việc của một tân binh IT:
-- Ngồi đối diện chiếc máy tính chạy **Hệ điều hành ảo CyberWork OS** (nhấn `[Space]` hoặc click để phóng to toàn màn hình làm việc).
-- Tương tác vật lý trực tiếp với các đồ vật trên bàn: **Cốc Cà Phê** hồi phục thể lực, **Điện Thoại Bàn** reo chuông khi có sự cố khẩn cấp, **Vịt Cao Su** xả stress, **Giấy Ghi Chú** dán viền màn hình.
-- Các NPC (Sếp Tuấn Anh, PM Hùng, Senior Minh, QA Trang) xuất hiện trực diện trước mặt bạn với biểu cảm sống động.
-- Chuyển đổi nhanh qua lại giữa **Bàn làm việc (Desk)**, **Quầy Pantry** (uống trà, hóng drama) và **Phòng Họp** (Daily Scrum).
+Trò chơi kết hợp 2 trải nghiệm độc đáo:
+1. **Góc nhìn thứ ba (Third-Person Walking RPG)**: Tự do điều khiển avatar nhân vật di chuyển bằng `[WASD / Mũi tên]` khám phá bản đồ văn phòng mở rộng 32x20 ô (1024x640px) với camera follow mượt mà qua 4 phòng ban chính:
+   - 💻 **Phòng Kỹ Thuật IT**: Nơi đặt bàn làm việc của bạn và Tech Lead Đức, Senior Dev Minh.
+   - ☕ **Quầy Pantry & Lounge**: Máy pha cà phê Espresso, tủ lạnh nước mát, ghế sofa êm ái nghỉ ngơi và trò chuyện cùng HR Lan, QA Trang.
+   - 📊 **Phòng Họp Alpha**: Bàn họp oval kính dài, bảng Kanban Scrum, nơi gặp PM Hùng bàn deadline và Sprint Review.
+   - 🖥️ **Phòng Server Datacenter**: Hệ thống tủ rack máy chủ với đèn LED chớp nháy và DevOps SRE Khoa canh giữ 24/7.
+2. **Góc nhìn thứ nhất (First-Person Desk Simulator)**: Khi đi tới bàn làm việc và nhấn `[E]`, bạn ngồi vào bàn với chiếc máy tính chạy **CyberWork OS** (nhấn `[Space]` để zoom in/out), nhấp cà phê `[1]`, nhấc máy khi điện thoại bàn reo `[2]`, bóp vịt cao su `[3]`, và có thể đứng dậy đi dạo bất cứ lúc nào bằng nút "Đứng dậy [Esc]".
 
 ---
 
@@ -62,14 +64,14 @@ Trò chơi đặt bạn vào **Góc nhìn thứ nhất (First-Person)** ngay t�
 
 | Phím | Hành Động |
 |---|---|
-| `Space` | Phóng to / Thu nhỏ Màn hình máy tính (CyberWork OS Focus) |
+| `W A S D` / `↑ ↓ ← →` | Đi bộ di chuyển avatar khám phá văn phòng qua 4 phòng ban |
+| `E` | Tương tác ngữ cảnh (Ngồi vào bàn làm việc, nói chuyện NPC, pha cafe, mở tủ lạnh) |
+| `Space` | Phóng to / Thu nhỏ Màn hình máy tính CyberWork OS |
 | `1` | Uống cà phê gốm (+15 Energy, -5 Stress) |
 | `2` | Nhấc điện thoại bàn khi có chuông reo |
 | `3` | Bóp vịt cao su (-2 Stress) |
-| `P` | Di chuyển đến Quầy Pantry (uống trà, hóng drama) |
-| `M` | Di chuyển đến Phòng Họp (Daily Scrum Standup) |
+| `Esc` | Đứng dậy rời bàn làm việc / Thoát phóng to / Đóng bảng menu |
 | `?` | Mở Cẩm Nang Sống Sót 60 Ngày Thử Việc |
-| `Esc` | Đóng hội thoại / Đóng bảng thông báo / Lùi về góc nhìn bàn làm việc |
 
 ---
 
@@ -83,7 +85,7 @@ Trò chơi đặt bạn vào **Góc nhìn thứ nhất (First-Person)** ngay t�
 # 1. Di chuyển vào thư mục dự án
 cd game_thuviec
 
-# 2. Chạy bộ kiểm thử tự động (50 unit tests)
+# 2. Chạy bộ kiểm thử tự động (56 unit tests)
 npm test
 
 # 3. Khởi động máy chủ phát triển cục bộ
