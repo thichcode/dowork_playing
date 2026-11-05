@@ -33,6 +33,82 @@ export class OfficeRenderer3D {
     this.lastPlayerTileX = 20;
     this.lastPlayerTileY = 14;
     this.isInitialized = false;
+
+    // Dust particles & Foliage sway
+    this.particleGroup = new this.THREE.Group();
+    this.particleGroup.name = 'dust_particles';
+    this.particles = [];
+    this.plants = [];
+    this.particleSpawnTimer = 0;
+    this.initParticlePool(16);
+  }
+
+  initParticlePool(count = 16) {
+    const THREE = this.THREE;
+    const geo = new THREE.DodecahedronGeometry(0.06);
+    const mat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.65 });
+
+    for (let i = 0; i < count; i++) {
+      const p = new THREE.Mesh(geo, mat);
+      p.visible = false;
+      p.active = false;
+      p.life = 0;
+      p.maxLife = 0.35;
+      this.particles.push(p);
+      this.particleGroup.add(p);
+    }
+  }
+
+  spawnDustParticle(x, y, z) {
+    const p = this.particles.find(part => !part.active);
+    if (!p) return null;
+
+    p.active = true;
+    p.visible = true;
+    p.life = 0;
+    p.position.set(x + (Math.random() - 0.5) * 0.15, y + 0.04, z + (Math.random() - 0.5) * 0.15);
+    p.scale.set(1.0, 1.0, 1.0);
+    return p;
+  }
+
+  getActiveParticleCount() {
+    return this.particles.filter(p => p.active).length;
+  }
+
+  updateParticles(deltaTime) {
+    for (const p of this.particles) {
+      if (!p.active) continue;
+
+      p.life += deltaTime;
+      if (p.life >= p.maxLife) {
+        p.active = false;
+        p.visible = false;
+      } else {
+        const progress = p.life / p.maxLife;
+        const scale = (1.0 - progress) * 1.2;
+        p.scale.set(scale, scale, scale);
+        p.position.y += deltaTime * 0.25;
+      }
+    }
+  }
+
+  updateFoliageSway(deltaTime, playerX, playerZ, isMoving = false) {
+    if (!this.plants || this.plants.length === 0) return;
+
+    for (const plant of this.plants) {
+      if (!plant) continue;
+      const dx = plant.position.x - playerX;
+      const dz = plant.position.z - playerZ;
+      const dist = Math.sqrt(dx * dx + dz * dz);
+
+      if (dist < 2.0 && isMoving) {
+        plant.swayTimer = (plant.swayTimer || 0) + deltaTime * 8;
+        const intensity = (1 - dist / 2.0) * 0.12;
+        plant.rotation.z = Math.sin(plant.swayTimer) * intensity;
+      } else {
+        plant.rotation.z *= Math.max(0, 1 - deltaTime * 6);
+      }
+    }
   }
 
   init(options = {}) {
@@ -55,6 +131,12 @@ export class OfficeRenderer3D {
     const officeGroup = this.officeBuilder.buildOffice(mapData);
     if (this.scene.scene) {
       this.scene.scene.add(officeGroup);
+      this.scene.scene.add(this.particleGroup);
+    }
+
+    const plantGroup = officeGroup.getObjectByName('plants');
+    if (plantGroup) {
+      this.plants = plantGroup.children;
     }
 
     // 3. Build Player 3D Avatar
@@ -122,9 +204,30 @@ export class OfficeRenderer3D {
       const angle = dirMap[player.direction] ?? 0;
       this.playerAvatar.setFacing(angle, true);
 
-      // Animate walk cycle
-      this.playerAvatar.updateAnimation(deltaTime, !!player.isMoving);
+      // Compute turn angle delta for cornering banking
+      let turnDiff = 0;
+      if (this.playerAvatar.mesh && this.playerAvatar.mesh.rotation) {
+        turnDiff = angle - this.playerAvatar.mesh.rotation.y;
+        while (turnDiff < -Math.PI) turnDiff += Math.PI * 2;
+        while (turnDiff > Math.PI) turnDiff -= Math.PI * 2;
+      }
+
+      // Animate walk cycle with sprint & banking
+      this.playerAvatar.updateAnimation(deltaTime, !!player.isMoving, !!player.isSprinting, turnDiff);
     }
+
+    // Footstep dust particles when sprinting
+    if (player.isMoving && player.isSprinting) {
+      this.particleSpawnTimer = (this.particleSpawnTimer || 0) + deltaTime;
+      if (this.particleSpawnTimer >= 0.08) {
+        this.particleSpawnTimer = 0;
+        this.spawnDustParticle(pos3D.x, 0, pos3D.z);
+      }
+    }
+    this.updateParticles(deltaTime);
+
+    // Responsive foliage sway on nearby plants
+    this.updateFoliageSway(deltaTime, pos3D.x, pos3D.z, !!player.isMoving);
 
     // Smooth camera follow target
     if (this.scene && typeof this.scene.setTarget === 'function') {
