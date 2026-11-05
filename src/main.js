@@ -14,6 +14,8 @@ import { globalDesktopOS } from './workstation/desktopOS.js';
 import { globalMinigameManager } from './minigames/minigameManager.js';
 import { globalChapterManager } from './story/chapterManager.js';
 import { globalRandomEventsManager } from './story/randomEvents.js';
+import { globalMenuScreen } from './ui/menuScreen.js';
+import { globalResultScreen } from './ui/resultScreen.js';
 
 console.log('MegaSoft Corp: 60 Ngày Thử Việc — Initializing modules...');
 
@@ -153,6 +155,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   // 6. Load saved state or use initial state
   globalGameState.load();
   globalHUD.updateAll();
+
+  // Show Menu Screen on boot
+  globalMenuScreen.show();
 
   // 7. Start Game Loop
   globalGameLoop.start();
